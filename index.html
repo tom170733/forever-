@@ -63,6 +63,9 @@
         .admin-panel input[type="text"], .admin-panel textarea {
             padding: 8px; border: none; border-radius: 6px; background: rgba(255,255,255,0.1); color: white; font-family: inherit; font-size: 0.85rem;
         }
+        .admin-panel input[type="file"] {
+            margin-top: 4px; color: #ffe5ec; font-size: 0.8rem;
+        }
         .admin-panel input[type="text"]:focus, .admin-panel textarea:focus { background: rgba(255,255,255,0.2); outline: none; }
         .wizard-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); }
         .admin-btn { padding: 8px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.85rem; transition: background 0.2s; }
@@ -82,7 +85,7 @@
         }
         .swiper-wrapper {
             display: flex;
-            width: var(--swiper-width, 500vw); /* Dynamically adjusted by JavaScript */
+            width: var(--swiper-width, 500vw);
             height: 100vh;
             transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
             padding-top: 40px;
@@ -127,7 +130,7 @@
             height: 250px;
             object-fit: cover;
             border-radius: 16px;
-            margin-top: 10px;
+            margin-top: 15px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.06);
         }
 
@@ -184,6 +187,10 @@
                 <input type="text" id="edit-main-title" value="To My Absolute Favorite Person...">
             </div>
             <div class="input-group">
+                <label>Slide 1: Picture / Video File</label>
+                <input type="file" id="edit-main-media" accept="image/*,video/*">
+            </div>
+            <div class="input-group" style="grid-column: span 2;">
                 <label>Slide 1: Subtext Description</label>
                 <input type="text" id="edit-main-sub" value="I built this little corner of the internet just for us. Swap pages using arrows below.">
             </div>
@@ -239,12 +246,16 @@
 
         <div class="wizard-step" id="step-5">
             <div class="input-group">
-                <label>Slide 5: Letter Paragraph 1</label>
-                <textarea id="edit-letter-1" rows="2">You make me laugh harder, love deeper, and smile bigger. You are my best friend and my absolute safest home.</textarea>
+                <label>Slide 5: Proposal Media File</label>
+                <input type="file" id="edit-letter-media" accept="image/*,video/*">
             </div>
             <div class="input-group">
+                <label>Slide 5: Letter Paragraph 1</label>
+                <textarea id="edit-letter-1" rows="1">You make me laugh harder, love deeper, and smile bigger. You are my best friend and my absolute safest home.</textarea>
+            </div>
+            <div class="input-group" style="grid-column: span 2; margin-top: 5px;">
                 <label>Slide 5: Letter Paragraph 2</label>
-                <textarea id="edit-letter-2" rows="2">I can't imagine a single second of my future without you standing right next to me...</textarea>
+                <textarea id="edit-letter-2" rows="1">I can't imagine a single second of my future without you standing right next to me...</textarea>
             </div>
         </div>
 
@@ -263,6 +274,7 @@
                 <div class="slide-card">
                     <h1 id="view-main-title">To My Absolute Favorite Person...</h1>
                     <p id="view-main-sub">I built this little corner of the internet just for us. Swap pages using arrows below.</p>
+                    <div id="media-container-0"></div>
                 </div>
             </div>
 
@@ -301,6 +313,7 @@
                     <div id="question-box">
                         <p id="view-letter-1">You make me laugh harder, love deeper, and smile bigger. You are my best friend and my absolute safest home.</p>
                         <p id="view-letter-2" style="font-weight: 600;">I can't imagine a single second of my future without you standing right next to me...</p>
+                        <div id="media-container-4"></div>
                         <br>
                         <h2>Will you marry me?</h2>
                         <div class="btn-container">
@@ -327,7 +340,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <script>
-        // --- DATA TRACKING ENGINE ---
+        // --- DISPLAY ENGINE ---
         let activePageIndex = 0;
         let deletedSlides = JSON.parse(localStorage.getItem('sw_deleted') || "[]");
 
@@ -343,18 +356,13 @@
         function slidePage(direction) {
             const visibleSlides = getVisibleSlides();
             
-            // Adjust tracking pointer bounds
             activePageIndex += direction;
             if(activePageIndex < 0) activePageIndex = 0;
             if(activePageIndex >= visibleSlides.length) activePageIndex = visibleSlides.length - 1;
 
-            // Update entire swiper layout widths depending on visible counts
             document.documentElement.style.setProperty('--swiper-width', `${visibleSlides.length * 100}vw`);
-            
-            // Shift container viewport window safely
             swiperWrapper.style.transform = `translateX(-${activePageIndex * 100}vw)`;
 
-            // Toggle controls state visibility
             leftArrow.disabled = (activePageIndex === 0);
             rightArrow.disabled = (activePageIndex === visibleSlides.length - 1);
         }
@@ -392,7 +400,6 @@
                 return;
             }
 
-            // Move view preview automatically to slide mapping matching wizard step
             const visibleSlides = getVisibleSlides();
             const targetSlideId = wizardStep - 1;
             const viewIndex = visibleSlides.indexOf(targetSlideId);
@@ -406,24 +413,20 @@
             updateLiveDOM();
         }
 
-        // --- MANAGE DYNAMIC SLIDE REMOVAL ---
         function deleteCurrentSlide(slideNumber) {
-            if(confirm("Are you sure you want to remove this slide from your presentation layout?")) {
+            if(confirm("Are you sure you want to remove this slide?")) {
                 if(!deletedSlides.includes(slideNumber)) {
                     deletedSlides.push(slideNumber);
                     localStorage.setItem('sw_deleted', JSON.stringify(deletedSlides));
                 }
-                
-                // Physically remove slide presentation frame node layout instantly
                 const element = document.getElementById(`slide-${slideNumber}`);
                 if(element) element.remove();
-                
-                alert("Slide removed successfully!");
-                changeStep(1); // Auto advance forward past deleted segment panel workspace
+                alert("Slide removed!");
+                changeStep(1);
             }
         }
 
-        // --- PERSISTENT STORAGE AND BROWSER RENDERING ---
+        // --- PERSISTENT STORAGE ENGINE ---
         function saveData() {
             localStorage.setItem('sw_title', document.getElementById('edit-main-title').value);
             localStorage.setItem('sw_sub', document.getElementById('edit-main-sub').value);
@@ -436,9 +439,11 @@
             localStorage.setItem('sw_l1', document.getElementById('edit-letter-1').value);
             localStorage.setItem('sw_l2', document.getElementById('edit-letter-2').value);
 
+            storeMedia('edit-main-media', 'sw_m0');
             storeMedia('edit-t1-media', 'sw_m1');
             storeMedia('edit-t2-media', 'sw_m2');
             storeMedia('edit-t3-media', 'sw_m3');
+            storeMedia('edit-letter-media', 'sw_m4');
         }
 
         function storeMedia(inputId, storageKey) {
@@ -455,7 +460,6 @@
         }
 
         function loadSavedData() {
-            // Apply deletions cleanly on bootstrap launch execution
             deletedSlides.forEach(slideId => {
                 const element = document.getElementById(`slide-${slideId}`);
                 if(element) element.remove();
@@ -474,12 +478,13 @@
                 document.getElementById('edit-letter-2').value = localStorage.getItem('sw_l2');
             }
             updateLiveDOM();
-            slidePage(0); // Recalculate layout sizes completely
+            slidePage(0);
         }
 
         function updateLiveDOM() {
             document.getElementById('view-main-title').innerText = document.getElementById('edit-main-title').value;
             document.getElementById('view-main-sub').innerText = document.getElementById('edit-main-sub').value;
+            displayMediaContainer('sw_m0', 'media-container-0');
             
             if(!deletedSlides.includes(1)) {
                 document.getElementById('view-t1-title').innerText = document.getElementById('edit-t1-title').value;
@@ -499,6 +504,7 @@
             
             document.getElementById('view-letter-1').innerText = document.getElementById('edit-letter-1').value;
             document.getElementById('view-letter-2').innerText = document.getElementById('edit-letter-2').value;
+            displayMediaContainer('sw_m4', 'media-container-4');
         }
 
         function displayMediaContainer(storageKey, containerId) {

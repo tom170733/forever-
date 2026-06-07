@@ -6,7 +6,7 @@
     <title>Our Story ❤️</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght=700&family=Poppins:wght=300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -22,341 +22,404 @@
             font-family: 'Poppins', sans-serif;
             background: var(--bg-gradient);
             color: var(--text-color);
-            overflow-x: hidden;
-            scroll-behavior: smooth;
+            overflow: hidden; /* Disables vertical scroll entirely */
         }
 
-        /* --- Secret Admin Trigger --- */
+        /* --- SECRET ADMIN TRIGGER (BOTTOM RIGHT) --- */
         #secret-trigger {
             position: fixed;
-            bottom: 10px;
-            right: 10px;
-            width: 20px;
-            height: 20px;
-            opacity: 0.1;
+            bottom: 15px;
+            right: 15px;
+            width: 25px;
+            height: 25px;
+            opacity: 0.05; /* Almost totally invisible */
             cursor: pointer;
-            z-index: 9999;
+            z-index: 100000;
+            font-size: 1.2rem;
+            transition: opacity 0.2s;
         }
         #secret-trigger:hover { opacity: 0.8; }
 
-        /* --- Admin Modal / Wizard Panel --- */
-        .admin-modal {
+        /* --- HIDDEN WIZARD DASHBOARD --- */
+        .admin-panel {
+            background: #2b2d42;
+            color: white;
+            padding: 20px;
+            width: 100%;
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            top: 0;
+            left: 0;
             z-index: 10000;
-            width: 90%;
-            max-width: 500px;
-            display: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border-bottom: 3px solid var(--primary-pink);
+            display: none; /* Hidden by default */
         }
-        .admin-modal h3 { margin-bottom: 15px; color: var(--primary-pink); }
-        .admin-modal label { display: block; margin: 10px 0 5px; font-weight: 600; font-size: 0.9rem; }
-        .admin-modal input[type="text"], .admin-modal textarea {
-            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit;
-        }
-        .admin-modal input[type="file"] { margin-top: 5px; }
+        .admin-panel h3 { color: var(--primary-pink); font-size: 1.1rem; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;}
         .wizard-step { display: none; }
-        .wizard-step.active { display: block; }
-        .wizard-buttons { display: flex; justify-content: space-between; margin-top: 20px; }
-        .admin-btn {
-            padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;
+        .wizard-step.active { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        @media (max-width: 768px) { .wizard-step.active { grid-template-columns: 1fr; gap: 5px; } }
+        .input-group { display: flex; flex-direction: column; }
+        .admin-panel label { font-size: 0.8rem; font-weight: 600; margin-bottom: 3px; color: #ffe5ec; }
+        .admin-panel input[type="text"], .admin-panel textarea {
+            padding: 8px; border: none; border-radius: 6px; background: rgba(255,255,255,0.1); color: white; font-family: inherit; font-size: 0.85rem;
         }
+        .admin-panel input[type="text"]:focus, .admin-panel textarea:focus { background: rgba(255,255,255,0.2); outline: none; }
+        .wizard-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .admin-btn { padding: 8px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.85rem; transition: background 0.2s; }
         .btn-next { background: var(--primary-pink); color: white; }
-        .btn-prev { background: #ccc; }
-        .btn-close { background: #2b2d42; color: white; position: absolute; top: 15px; right: 15px; padding: 5px 10px; border-radius: 5px; font-size: 0.8rem;}
+        .btn-next:hover { background: #ff3355; }
+        .btn-prev { background: #4a4e69; color: white; }
+        .btn-prev:disabled { opacity: 0.3; cursor: not-allowed; }
+        .btn-close { background: #ff4d6d; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; border: none; cursor: pointer; }
 
-        /* --- Main Proposal Site Layout --- */
-        header {
+        /* --- HORIZONTAL SWIPE CONTAINER --- */
+        .swiper-wrapper {
+            display: flex;
+            width: 500vw; /* 5 slides total */
+            height: 100vh;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            padding-top: 40px;
+        }
+
+        .slide {
+            width: 100vw;
             height: 100vh;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
             padding: 20px;
+            flex-shrink: 0;
         }
 
-        h1 {
-            font-family: 'Dancing Script', cursive; font-size: 4.5rem; color: var(--primary-pink);
-            margin-bottom: 20px; animation: heartbeat 1.8s infinite;
+        /* --- CARD ARCHITECTURE --- */
+        .slide-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.1);
+            max-width: 650px;
+            width: 100%;
+            text-align: center;
+            max-height: 90vh;
+            overflow-y: auto;
         }
+
+        h1, h2 { font-family: 'Dancing Script', cursive; color: var(--primary-pink); margin-bottom: 15px; }
+        h1 { font-size: 4rem; animation: heartbeat 1.8s infinite; }
+        h2 { font-size: 3rem; }
+        p { font-size: 1.1rem; line-height: 1.6; color: #4a4e69; margin-bottom: 15px; }
 
         @keyframes heartbeat {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.03); }
         }
 
-        .scroll-down { margin-top: 40px; font-size: 1.2rem; opacity: 0.7; animation: bounce 2s infinite; }
-        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }
-
-        .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
-        .timeline { position: relative; padding: 20px 0; }
-        .timeline::before { content: ''; position: absolute; left: 50%; top: 0; height: 100%; width: 4px; background: white; transform: translateX(-50%); border-radius: 2px; }
-
-        .timeline-item { padding: 20px 40px; position: relative; width: 50%; opacity: 0; transform: translateY(40px); transition: all 0.8s ease; }
-        .timeline-item.visible { opacity: 1; transform: translateY(0); }
-        .timeline-item:nth-child(odd) { left: 0; text-align: right; }
-        .timeline-item:nth-child(even) { left: 50%; text-align: left; }
-        .timeline-item::after { content: '❤️'; position: absolute; width: 24px; height: 24px; right: -12px; top: 25px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        .timeline-item:nth-child(even)::after { left: -12px; }
-
-        .content { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(255, 77, 109, 0.08); }
-        .content h3 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--primary-pink); margin-bottom: 10px; }
-        .content p { font-size: 1rem; line-height: 1.6; color: #4a4e69; }
-
-        .media-frame { width: 100%; height: 220px; object-fit: cover; border-radius: 12px; margin-top: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-
-        .letter { text-align: center; padding: 80px 30px; background: rgba(255, 255, 255, 0.4); border-radius: 24px; margin: 60px 0; }
-        .letter p { font-size: 1.3rem; line-height: 1.8; max-width: 650px; margin: 0 auto 25px auto; }
-
-        .proposal-box { text-align: center; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; padding: 20px; }
-        .proposal-box h2 { font-family: 'Dancing Script', cursive; font-size: 5rem; color: var(--primary-pink); margin-bottom: 50px; }
-
-        .btn-container { display: flex; gap: 40px; justify-content: center; align-items: center; min-height: 150px; width: 100%; }
-        .btn { padding: 18px 50px; font-size: 1.3rem; font-weight: 600; border: none; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
-        #yes-btn { background-color: var(--primary-pink); color: white; }
-        #yes-btn:hover { transform: scale(1.15); background-color: #ff3355; box-shadow: 0 10px 25px rgba(255, 77, 109, 0.3); }
-        #no-btn { background-color: #fff; color: var(--text-color); z-index: 100; }
-
-        .hidden { display: none !important; }
-        #success-screen { text-align: center; animation: fadeIn 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
-        #success-screen h2 { font-family: 'Dancing Script', cursive; font-size: 5.5rem; color: var(--primary-pink); margin-bottom: 20px; }
-
-        @media (max-width: 768px) {
-            .timeline::before { left: 40px; }
-            .timeline-item { width: 100%; left: 0 !important; text-align: left !important; padding-left: 80px; }
-            .timeline-item::after { left: 28px !important; }
-            h1 { font-size: 3.2rem; }
-            .proposal-box h2 { font-size: 3.5rem; }
-            #success-screen h2 { font-size: 3.8rem; }
-            .btn-container { flex-direction: column; gap: 20px; }
+        .media-frame {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 16px;
+            margin-top: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
         }
+
+        /* --- SLIDE NAV BUTTONS --- */
+        .nav-arrows {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 100px;
+            z-index: 99;
+        }
+        .arrow {
+            background: white;
+            color: var(--primary-pink);
+            border: 2px solid var(--primary-pink);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+        }
+        .arrow:hover { background: var(--primary-pink); color: white; }
+        .arrow:disabled { opacity: 0.2; cursor: not-allowed; border-color: #ccc; color: #ccc; }
+
+        /* --- PROPOSAL SYSTEM --- */
+        .btn-container { display: flex; gap: 30px; justify-content: center; align-items: center; margin-top: 30px; min-height: 80px;}
+        .proposal-btn { padding: 15px 40px; font-size: 1.2rem; font-weight: 600; border: none; border-radius: 50px; cursor: pointer; transition: all 0.2s; box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
+        #yes-btn { background-color: var(--primary-pink); color: white; }
+        #yes-btn:hover { transform: scale(1.1); background-color: #ff3355; }
+        #no-btn { background-color: #fff; color: var(--text-color); z-index: 1000; }
+        .hidden { display: none !important; }
+
+        #success-screen h2 { font-size: 4.5rem; }
     </style>
 </head>
 <body>
 
     <div id="secret-trigger" onclick="openAdmin()">⚙️</div>
 
-    <div class="admin-modal" id="adminModal">
-        <button class="btn-close" onclick="closeAdmin()">Close</button>
-        <h3>Customize Dashboard</h3>
-        <hr><br>
-
+    <div class="admin-panel" id="adminPanel">
+        <h3>⚙️ Proposal Builder Panel <button class="btn-close" onclick="closeAdmin()">Save & Close</button></h3>
+        
         <div class="wizard-step active" id="step-1">
-            <h4>Step 1: The Introduction</h4>
-            <label>Main Large Header Title</label>
-            <input type="text" id="edit-main-title" value="To My Absolute Favorite Person...">
-            <label>Subtext Description</label>
-            <input type="text" id="edit-main-sub" value="I built this little corner of the internet just for us.">
+            <div class="input-group">
+                <label>Slide 1: Large Header Title</label>
+                <input type="text" id="edit-main-title" value="To My Absolute Favorite Person...">
+            </div>
+            <div class="input-group">
+                <label>Slide 1: Subtext Description</label>
+                <input type="text" id="edit-main-sub" value="I built this little corner of the internet just for us. Swap pages using arrows below.">
+            </div>
         </div>
 
         <div class="wizard-step" id="step-2">
-            <h4>Step 2: The Day We Met</h4>
-            <label>Title text</label>
-            <input type="text" id="edit-t1-title" value="The Day We Met">
-            <label>Your Story Story description</label>
-            <textarea id="edit-t1-desc" rows="3">It started with a simple, beautiful conversation, but deep down, I already knew my life was changing forever.</textarea>
-            <label>Upload Picture or Video</label>
-            <input type="file" id="edit-t1-media" accept="image/*,video/*">
+            <div class="input-group">
+                <label>Slide 2: Milestone Title</label>
+                <input type="text" id="edit-t1-title" value="The Day We Met">
+            </div>
+            <div class="input-group">
+                <label>Slide 2: Picture / Video File</label>
+                <input type="file" id="edit-t1-media" accept="image/*,video/*">
+            </div>
+            <div class="input-group" style="grid-column: span 2;">
+                <label>Description</label>
+                <textarea id="edit-t1-desc" rows="1">It started with a beautiful conversation, but deep down, I already knew my life was changing forever.</textarea>
+            </div>
         </div>
 
         <div class="wizard-step" id="step-3">
-            <h4>Step 3: Our First Date</h4>
-            <label>Title text</label>
-            <input type="text" id="edit-t2-title" value="Our First Official Date">
-            <label>Your Story description</label>
-            <textarea id="edit-t2-desc" rows="3">I was incredibly nervous, but the moment you smiled, all my fears completely faded away.</textarea>
-            <label>Upload Picture or Video</label>
-            <input type="file" id="edit-t2-media" accept="image/*,video/*">
+            <div class="input-group">
+                <label>Slide 3: Milestone Title</label>
+                <input type="text" id="edit-t2-title" value="Our First Official Date">
+            </div>
+            <div class="input-group">
+                <label>Slide 3: Picture / Video File</label>
+                <input type="file" id="edit-t2-media" accept="image/*,video/*">
+            </div>
+            <div class="input-group" style="grid-column: span 2;">
+                <label>Description</label>
+                <textarea id="edit-t2-desc" rows="1">I was incredibly nervous, but the moment you smiled, all my fears completely faded away. Best night ever.</textarea>
+            </div>
         </div>
 
         <div class="wizard-step" id="step-4">
-            <h4>Step 4: Adventures</h4>
-            <label>Title text</label>
-            <input type="text" id="edit-t3-title" value="Countless Adventures">
-            <label>Your Story description</label>
-            <textarea id="edit-t3-desc" rows="3">From the quiet Sunday mornings to exploring brand new places hand-in-hand, every single second spent next to you is a treasure.</textarea>
-            <label>Upload Picture or Video</label>
-            <input type="file" id="edit-t3-media" accept="image/*,video/*">
+            <div class="input-group">
+                <label>Slide 4: Milestone Title</label>
+                <input type="text" id="edit-t3-title" value="Countless Adventures">
+            </div>
+            <div class="input-group">
+                <label>Slide 4: Picture / Video File</label>
+                <input type="file" id="edit-t3-media" accept="image/*,video/*">
+            </div>
+            <div class="input-group" style="grid-column: span 2;">
+                <label>Description</label>
+                <textarea id="edit-t3-desc" rows="1">From lazy Sunday mornings to exploring brand new cities hand-in-hand, every second with you is a treasure.</textarea>
+            </div>
         </div>
 
         <div class="wizard-step" id="step-5">
-            <h4>Step 5: The Love Letter & Proposal</h4>
-            <label>Paragraph 1</label>
-            <textarea id="edit-letter-1" rows="3">Every single day, you make me laugh harder, love deeper, and smile bigger. You are my best friend, my safest home, and my greatest adventure.</textarea>
-            <label>Paragraph 2</label>
-            <textarea id="edit-letter-2" rows="2">I cannot imagine a single second of my future without you standing right next to me...</textarea>
+            <div class="input-group">
+                <label>Slide 5: Letter Paragraph 1</label>
+                <textarea id="edit-letter-1" rows="2">You make me laugh harder, love deeper, and smile bigger. You are my best friend and my absolute safest home.</textarea>
+            </div>
+            <div class="input-group">
+                <label>Slide 5: Letter Paragraph 2</label>
+                <textarea id="edit-letter-2" rows="2">I can't imagine a single second of my future without you standing right next to me...</textarea>
+            </div>
         </div>
 
-        <div class="wizard-buttons">
-            <button class="admin-btn btn-prev" id="prevBtn" onclick="changeStep(-1)" disabled>Previous</button>
-            <button class="admin-btn btn-next" id="nextBtn" onclick="changeStep(1)">Next</button>
+        <div class="wizard-footer">
+            <button class="admin-btn btn-prev" id="prevBtn" onclick="changeStep(-1)" disabled>Back</button>
+            <span id="stepIndicator" style="font-size:0.85rem;">Step 1 of 5</span>
+            <button class="admin-btn btn-next" id="nextBtn" onclick="changeStep(1)">Next Step</button>
         </div>
     </div>
 
 
-    <header>
-        <h1 id="view-main-title">To My Absolute Favorite Person...</h1>
-        <p id="view-main-sub">I built this little corner of the internet just for us.</p>
-        <div class="scroll-down">Scroll Down ❤️</div>
-    </header>
-
-    <div class="container">
-        <div class="timeline">
-            
-            <div class="timeline-item">
-                <div class="content">
-                    <h3 id="view-t1-title">The Day We Met</h3>
-                    <p id="view-t1-desc">It started with a simple, beautiful conversation, but deep down, I already knew my life was changing forever.</p>
-                    <div id="media-container-1">
-                        <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=600" class="media-frame">
-                    </div>
-                </div>
+    <div class="swiper-wrapper" id="mainSwiper">
+        
+        <div class="slide">
+            <div class="slide-card">
+                <h1 id="view-main-title">To My Absolute Favorite Person...</h1>
+                <p id="view-main-sub">I built this little corner of the internet just for us. Swap pages using arrows below.</p>
             </div>
-
-            <div class="timeline-item">
-                <div class="content">
-                    <h3 id="view-t2-title">Our First Official Date</h3>
-                    <p id="view-t2-desc">I was incredibly nervous, but the moment you smiled, all my fears completely faded away.</p>
-                    <div id="media-container-2">
-                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=600" class="media-frame">
-                    </div>
-                </div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="content">
-                    <h3 id="view-t3-title">Countless Adventures</h3>
-                    <p id="view-t3-desc">From the quiet Sunday mornings to exploring brand new places hand-in-hand, every single second spent next to you is a treasure.</p>
-                    <div id="media-container-3">
-                        <img src="https://images.unsplash.com/photo-1494548162494-384bba4ab999?q=80&w=600" class="media-frame">
-                    </div>
-                </div>
-            </div>
-
         </div>
 
-        <div class="letter">
-            <p id="view-letter-1">Every single day, you make me laugh harder, love deeper, and smile bigger. You are my best friend, my safest home, and my greatest adventure.</p>
-            <p id="view-letter-2">I cannot imagine a single second of my future without you standing right next to me...</p>
+        <div class="slide">
+            <div class="slide-card">
+                <h2 id="view-t1-title">The Day We Met</h2>
+                <p id="view-t1-desc">It started with a beautiful conversation, but deep down, I already knew my life was changing forever.</p>
+                <div id="media-container-1">
+                    <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=600" class="media-frame">
+                </div>
+            </div>
         </div>
+
+        <div class="slide">
+            <div class="slide-card">
+                <h2 id="view-t2-title">Our First Official Date</h2>
+                <p id="view-t2-desc">I was incredibly nervous, but the moment you smiled, all my fears completely faded away. Best night ever.</p>
+                <div id="media-container-2">
+                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=600" class="media-frame">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-card">
+                <h2 id="view-t3-title">Countless Adventures</h2>
+                <p id="view-t3-desc">From lazy Sunday mornings to exploring brand new cities hand-in-hand, every second with you is a treasure.</p>
+                <div id="media-container-3">
+                    <img src="https://images.unsplash.com/photo-1494548162494-384bba4ab999?q=80&w=600" class="media-frame">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-card" style="position: relative;">
+                <div id="question-box">
+                    <p id="view-letter-1">You make me laugh harder, love deeper, and smile bigger. You are my best friend and my absolute safest home.</p>
+                    <p id="view-letter-2" style="font-weight: 600;">I can't imagine a single second of my future without you standing right next to me...</p>
+                    <br>
+                    <h2>Will you marry me?</h2>
+                    <div class="btn-container">
+                        <button class="proposal-btn" id="yes-btn">YES! 💍</button>
+                        <button class="proposal-btn" id="no-btn">No</button>
+                    </div>
+                </div>
+
+                <div id="success-screen" class="hidden">
+                    <h2>She Said YES!!! 🎉</h2>
+                    <p>I love you forever and always. Let's start our forever chapter. ❤️</p>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <section class="proposal-box">
-        <div id="question-box">
-            <h2>Will you marry me?</h2>
-            <div class="btn-container">
-                <button class="btn" id="yes-btn">YES! 💍</button>
-                <button class="btn" id="no-btn">No</button>
-            </div>
-        </div>
-
-        <div id="success-screen" class="hidden">
-            <h2>She Said YES!!! 🎉</h2>
-            <p>I love you forever and always. Let's start our forever chapter. ❤️</p>
-        </div>
-    </section>
+    <div class="nav-arrows">
+        <button class="arrow" id="slideLeftBtn" onclick="slidePage(-1)" disabled>←</button>
+        <button class="arrow" id="slideRightBtn" onclick="slidePage(1)">→</button>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <script>
-        // --- PASSWORD CONFIG ---
-        const ADMIN_PASSWORD = "love"; // Put your custom password here!
+        // --- DISPLAY & SWIPE ANIMATION ENGINE ---
+        let activePageIndex = 0;
+        const swiperWrapper = document.getElementById('mainSwiper');
+        const leftArrow = document.getElementById('slideLeftBtn');
+        const rightArrow = document.getElementById('slideRightBtn');
 
-        // --- STEP WIZARD ENGINE ---
-        let currentStep = 1;
-        const totalSteps = 5;
+        function slidePage(direction) {
+            activePageIndex += direction;
+            if(activePageIndex < 0) activePageIndex = 0;
+            if(activePageIndex > 4) activePageIndex = 4;
+
+            swiperWrapper.style.transform = `translateX(-${activePageIndex * 100}vw)`;
+
+            leftArrow.disabled = (activePageIndex === 0);
+            rightArrow.disabled = (activePageIndex === 4);
+        }
+
+        // --- DASHBOARD WIZARD CONTROLLER ---
+        let wizardStep = 1;
 
         function openAdmin() {
             let attempt = prompt("Enter Admin Password:");
-            if (attempt === ADMIN_PASSWORD) {
-                document.getElementById('adminModal').style.display = 'block';
+            if (attempt === "love") {
+                document.getElementById('adminPanel').style.display = 'block';
             } else if (attempt !== null) {
                 alert("Incorrect password!");
             }
         }
 
         function closeAdmin() {
-            document.getElementById('adminModal').style.display = 'none';
-            saveAllToStorage();
+            document.getElementById('adminPanel').style.display = 'none';
+            saveData();
+            updateLiveDOM();
         }
 
         function changeStep(direction) {
-            document.getElementById(`step-${currentStep}`).classList.remove('active');
-            currentStep += direction;
-            document.getElementById(`step-${currentStep}`).classList.add('active');
+            document.getElementById(`step-${wizardStep}`).classList.remove('active');
+            wizardStep += direction;
+            document.getElementById(`step-${wizardStep}`).classList.add('active');
 
-            document.getElementById('prevBtn').disabled = (currentStep === 1);
-            
-            if (currentStep === totalSteps) {
-                document.getElementById('nextBtn').innerText = "Finish & Save";
-            } else {
-                document.getElementById('nextBtn').innerText = "Next";
-            }
+            document.getElementById('prevBtn').disabled = (wizardStep === 1);
+            document.getElementById('nextBtn').innerText = (wizardStep === 5) ? "Save & Close" : "Next Step";
+            document.getElementById('stepIndicator').innerText = `Step ${wizardStep} of 5`;
 
-            if (currentStep > totalSteps) {
-                currentStep = totalSteps; // reset bounds
+            if(wizardStep > 5) {
+                wizardStep = 5;
                 closeAdmin();
+                return;
             }
-            saveAllToStorage();
-            updatePublicView();
+
+            activePageIndex = wizardStep - 1;
+            slidePage(0); 
+
+            saveData();
+            updateLiveDOM();
         }
 
-        // --- SAVE AND LOAD ENGINE ---
-        function saveAllToStorage() {
-            localStorage.setItem('mainTitle', document.getElementById('edit-main-title').value);
-            localStorage.setItem('mainSub', document.getElementById('edit-main-sub').value);
-            localStorage.setItem('t1Title', document.getElementById('edit-t1-title').value);
-            localStorage.setItem('t1Desc', document.getElementById('edit-t1-desc').value);
-            localStorage.setItem('t2Title', document.getElementById('edit-t2-title').value);
-            localStorage.setItem('t2Desc', document.getElementById('edit-t2-desc').value);
-            localStorage.setItem('t3Title', document.getElementById('edit-t3-title').value);
-            localStorage.setItem('t3Desc', document.getElementById('edit-t3-desc').value);
-            localStorage.setItem('let1', document.getElementById('edit-letter-1').value);
-            localStorage.setItem('let2', document.getElementById('edit-letter-2').value);
+        // --- ENGINE STORAGE AND RENDER ---
+        function saveData() {
+            localStorage.setItem('sw_title', document.getElementById('edit-main-title').value);
+            localStorage.setItem('sw_sub', document.getElementById('edit-main-sub').value);
+            localStorage.setItem('sw_t1t', document.getElementById('edit-t1-title').value);
+            localStorage.setItem('sw_t1d', document.getElementById('edit-t1-desc').value);
+            localStorage.setItem('sw_t2t', document.getElementById('edit-t2-title').value);
+            localStorage.setItem('sw_t2d', document.getElementById('edit-t2-desc').value);
+            localStorage.setItem('sw_t3t', document.getElementById('edit-t3-title').value);
+            localStorage.setItem('sw_t3d', document.getElementById('edit-t3-desc').value);
+            localStorage.setItem('sw_l1', document.getElementById('edit-letter-1').value);
+            localStorage.setItem('sw_l2', document.getElementById('edit-letter-2').value);
 
-            // File conversions to Base64 data strings for persistent LocalStorage
-            handleFileSave('edit-t1-media', 'mediaData1');
-            handleFileSave('edit-t2-media', 'mediaData2');
-            handleFileSave('edit-t3-media', 'mediaData3');
+            storeMedia('edit-t1-media', 'sw_m1');
+            storeMedia('edit-t2-media', 'sw_m2');
+            storeMedia('edit-t3-media', 'sw_m3');
         }
 
-        function handleFileSave(inputId, storageKey) {
+        function storeMedia(inputId, storageKey) {
             const file = document.getElementById(inputId).files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     localStorage.setItem(storageKey, e.target.result);
-                    localStorage.setItem(storageKey + '_type', file.type);
-                    updatePublicView();
+                    localStorage.setItem(storageKey + '_rawType', file.type);
+                    updateLiveDOM();
                 };
                 reader.readAsDataURL(file);
             }
         }
 
-        function loadFromStorage() {
-            if(localStorage.getItem('mainTitle')) {
-                document.getElementById('edit-main-title').value = localStorage.getItem('mainTitle');
-                document.getElementById('edit-main-sub').value = localStorage.getItem('mainSub');
-                document.getElementById('edit-t1-title').value = localStorage.getItem('t1Title');
-                document.getElementById('edit-t1-desc').value = localStorage.getItem('t1Desc');
-                document.getElementById('edit-t2-title').value = localStorage.getItem('t2Title');
-                document.getElementById('edit-t2-desc').value = localStorage.getItem('t2Desc');
-                document.getElementById('edit-t3-title').value = localStorage.getItem('t3Title');
-                document.getElementById('edit-t3-desc').value = localStorage.getItem('t3Desc');
-                document.getElementById('edit-letter-1').value = localStorage.getItem('let1');
-                document.getElementById('edit-letter-2').value = localStorage.getItem('let2');
+        function loadSavedData() {
+            if(localStorage.getItem('sw_title')) {
+                document.getElementById('edit-main-title').value = localStorage.getItem('sw_title');
+                document.getElementById('edit-main-sub').value = localStorage.getItem('sw_sub');
+                document.getElementById('edit-t1-title').value = localStorage.getItem('sw_t1t');
+                document.getElementById('edit-t1-desc').value = localStorage.getItem('sw_t1d');
+                document.getElementById('edit-t2-title').value = localStorage.getItem('sw_t2t');
+                document.getElementById('edit-t2-desc').value = localStorage.getItem('sw_t2d');
+                document.getElementById('edit-t3-title').value = localStorage.getItem('sw_t3t');
+                document.getElementById('edit-t3-desc').value = localStorage.getItem('sw_t3d');
+                document.getElementById('edit-letter-1').value = localStorage.getItem('sw_l1');
+                document.getElementById('edit-letter-2').value = localStorage.getItem('sw_l2');
             }
-            updatePublicView();
+            updateLiveDOM();
         }
 
-        function updatePublicView() {
+        function updateLiveDOM() {
             document.getElementById('view-main-title').innerText = document.getElementById('edit-main-title').value;
             document.getElementById('view-main-sub').innerText = document.getElementById('edit-main-sub').value;
             document.getElementById('view-t1-title').innerText = document.getElementById('edit-t1-title').value;
@@ -368,49 +431,39 @@
             document.getElementById('view-letter-1').innerText = document.getElementById('edit-letter-1').value;
             document.getElementById('view-letter-2').innerText = document.getElementById('edit-letter-2').value;
 
-            renderMedia('mediaData1', 'media-container-1');
-            renderMedia('mediaData2', 'media-container-2');
-            renderMedia('mediaData3', 'media-container-3');
+            displayMediaContainer('sw_m1', 'media-container-1');
+            displayMediaContainer('sw_m2', 'media-container-2');
+            displayMediaContainer('sw_m3', 'media-container-3');
         }
 
-        function renderMedia(storageKey, containerId) {
-            const data = localStorage.getItem(storageKey);
-            const type = localStorage.getItem(storageKey + '_type');
-            if (data && type) {
-                const container = document.getElementById(containerId);
-                container.innerHTML = '';
-                if(type.startsWith('video/')) {
+        function displayMediaContainer(storageKey, containerId) {
+            const dataStr = localStorage.getItem(storageKey);
+            const mimeType = localStorage.getItem(storageKey + '_rawType');
+            if (dataStr && mimeType) {
+                const targetNode = document.getElementById(containerId);
+                targetNode.innerHTML = '';
+                if(mimeType.startsWith('video/')) {
                     const video = document.createElement('video');
-                    video.src = data; video.className = 'media-frame'; video.controls = true; video.loop = true; video.muted = true; video.autoplay = true;
-                    container.appendChild(video);
+                    video.src = dataStr; video.className = 'media-frame'; video.controls = true; video.loop = true; video.muted = true; video.autoplay = true;
+                    targetNode.appendChild(video);
                 } else {
                     const img = document.createElement('img');
-                    img.src = data; img.className = 'media-frame';
-                    container.appendChild(img);
+                    img.src = dataStr; img.className = 'media-frame';
+                    targetNode.appendChild(img);
                 }
             }
         }
 
-        // --- PUBLIC TIMELINE SCROLL ANIMATION ---
-        const timelineItems = document.querySelectorAll('.timeline-item');
-        const checkVisibility = () => {
-            const triggerBottom = window.innerHeight * 0.85;
-            timelineItems.forEach(item => {
-                if(item.getBoundingClientRect().top < triggerBottom) item.classList.add('visible');
-            });
-        };
-        window.addEventListener('scroll', checkVisibility);
-
-        // --- PROPOSAL BUTTONS MOTION ENGINE ---
+        // --- BUTTON MOTIONS ---
         const noBtn = document.getElementById('no-btn');
         const yesBtn = document.getElementById('yes-btn');
         const questionBox = document.getElementById('question-box');
         const successScreen = document.getElementById('success-screen');
 
         const moveNoButton = () => {
-            const padding = 60;
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding * 2) + padding;
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding * 2) + padding;
+            const pad = 70;
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - pad * 2) + pad;
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - pad * 2) + pad;
             noBtn.style.position = 'fixed'; noBtn.style.left = `${x}px`; noBtn.style.top = `${y}px`;
         };
         noBtn.addEventListener('mouseover', moveNoButton);
@@ -419,24 +472,22 @@
         yesBtn.addEventListener('click', () => {
             questionBox.classList.add('hidden');
             successScreen.classList.remove('hidden');
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 
-            const duration = 12 * 1000;
-            const animationEnd = Date.now() + duration;
-            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
-            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+            const length = 12 * 1000;
+            const endAnim = Date.now() + length;
+            const confDefaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 10001 };
+            function scopeRange(min, max) { return Math.random() * (max - min) + min; }
 
-            const interval = setInterval(function() {
-              const timeLeft = animationEnd - Date.now();
-              if (timeLeft <= 0) return clearInterval(interval);
-              const particleCount = 60 * (timeLeft / duration);
-              confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
-              confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+            const loopRunner = setInterval(function() {
+              const remaining = endAnim - Date.now();
+              if (remaining <= 0) return clearInterval(loopRunner);
+              const count = 60 * (remaining / length);
+              confetti({ ...confDefaults, count, origin: { x: scopeRange(0.1, 0.3), y: Math.random() - 0.2 } });
+              confetti({ ...confDefaults, count, origin: { x: scopeRange(0.7, 0.9), y: Math.random() - 0.2 } });
             }, 250);
         });
 
-        // Initialize App on Load
-        window.onload = () => { loadFromStorage(); checkVisibility(); };
+        window.onload = () => { loadSavedData(); };
     </script>
 </body>
 </html>

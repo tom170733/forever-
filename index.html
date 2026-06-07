@@ -6,7 +6,7 @@
     <title>Our Story ❤️</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght=700&family=Poppins:wght=300;400;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -32,7 +32,7 @@
             right: 15px;
             width: 25px;
             height: 25px;
-            opacity: 0.05; /* Almost totally invisible */
+            opacity: 0.05;
             cursor: pointer;
             z-index: 100000;
             font-size: 1.2rem;
@@ -52,7 +52,7 @@
             z-index: 10000;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             border-bottom: 3px solid var(--primary-pink);
-            display: none; /* Hidden by default */
+            display: none;
         }
         .admin-panel h3 { color: var(--primary-pink); font-size: 1.1rem; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;}
         .wizard-step { display: none; }
@@ -71,11 +71,18 @@
         .btn-prev { background: #4a4e69; color: white; }
         .btn-prev:disabled { opacity: 0.3; cursor: not-allowed; }
         .btn-close { background: #ff4d6d; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; border: none; cursor: pointer; }
+        .btn-delete { background: #e63946; color: white; margin-top: 15px; grid-column: span 2; width: fit-content; padding: 6px 12px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer;}
+        .btn-delete:hover { background: #c1121f; }
 
         /* --- HORIZONTAL SWIPE CONTAINER --- */
+        .swiper-container {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
         .swiper-wrapper {
             display: flex;
-            width: 500vw; /* 5 slides total */
+            width: var(--swiper-width, 500vw); /* Dynamically adjusted by JavaScript */
             height: 100vh;
             transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
             padding-top: 40px;
@@ -195,6 +202,7 @@
                 <label>Description</label>
                 <textarea id="edit-t1-desc" rows="1">It started with a beautiful conversation, but deep down, I already knew my life was changing forever.</textarea>
             </div>
+            <button class="btn-delete" onclick="deleteCurrentSlide(1)">❌ Delete This Slide</button>
         </div>
 
         <div class="wizard-step" id="step-3">
@@ -210,6 +218,7 @@
                 <label>Description</label>
                 <textarea id="edit-t2-desc" rows="1">I was incredibly nervous, but the moment you smiled, all my fears completely faded away. Best night ever.</textarea>
             </div>
+            <button class="btn-delete" onclick="deleteCurrentSlide(2)">❌ Delete This Slide</button>
         </div>
 
         <div class="wizard-step" id="step-4">
@@ -225,6 +234,7 @@
                 <label>Description</label>
                 <textarea id="edit-t3-desc" rows="1">From lazy Sunday mornings to exploring brand new cities hand-in-hand, every second with you is a treasure.</textarea>
             </div>
+            <button class="btn-delete" onclick="deleteCurrentSlide(3)">❌ Delete This Slide</button>
         </div>
 
         <div class="wizard-step" id="step-5">
@@ -246,65 +256,67 @@
     </div>
 
 
-    <div class="swiper-wrapper" id="mainSwiper">
-        
-        <div class="slide">
-            <div class="slide-card">
-                <h1 id="view-main-title">To My Absolute Favorite Person...</h1>
-                <p id="view-main-sub">I built this little corner of the internet just for us. Swap pages using arrows below.</p>
-            </div>
-        </div>
-
-        <div class="slide">
-            <div class="slide-card">
-                <h2 id="view-t1-title">The Day We Met</h2>
-                <p id="view-t1-desc">It started with a beautiful conversation, but deep down, I already knew my life was changing forever.</p>
-                <div id="media-container-1">
-                    <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=600" class="media-frame">
+    <div class="swiper-container">
+        <div class="swiper-wrapper" id="mainSwiper">
+            
+            <div class="slide" id="slide-0">
+                <div class="slide-card">
+                    <h1 id="view-main-title">To My Absolute Favorite Person...</h1>
+                    <p id="view-main-sub">I built this little corner of the internet just for us. Swap pages using arrows below.</p>
                 </div>
             </div>
-        </div>
 
-        <div class="slide">
-            <div class="slide-card">
-                <h2 id="view-t2-title">Our First Official Date</h2>
-                <p id="view-t2-desc">I was incredibly nervous, but the moment you smiled, all my fears completely faded away. Best night ever.</p>
-                <div id="media-container-2">
-                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=600" class="media-frame">
-                </div>
-            </div>
-        </div>
-
-        <div class="slide">
-            <div class="slide-card">
-                <h2 id="view-t3-title">Countless Adventures</h2>
-                <p id="view-t3-desc">From lazy Sunday mornings to exploring brand new cities hand-in-hand, every second with you is a treasure.</p>
-                <div id="media-container-3">
-                    <img src="https://images.unsplash.com/photo-1494548162494-384bba4ab999?q=80&w=600" class="media-frame">
-                </div>
-            </div>
-        </div>
-
-        <div class="slide">
-            <div class="slide-card" style="position: relative;">
-                <div id="question-box">
-                    <p id="view-letter-1">You make me laugh harder, love deeper, and smile bigger. You are my best friend and my absolute safest home.</p>
-                    <p id="view-letter-2" style="font-weight: 600;">I can't imagine a single second of my future without you standing right next to me...</p>
-                    <br>
-                    <h2>Will you marry me?</h2>
-                    <div class="btn-container">
-                        <button class="proposal-btn" id="yes-btn">YES! 💍</button>
-                        <button class="proposal-btn" id="no-btn">No</button>
+            <div class="slide" id="slide-1">
+                <div class="slide-card">
+                    <h2 id="view-t1-title">The Day We Met</h2>
+                    <p id="view-t1-desc">It started with a beautiful conversation, but deep down, I already knew my life was changing forever.</p>
+                    <div id="media-container-1">
+                        <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=600" class="media-frame">
                     </div>
                 </div>
+            </div>
 
-                <div id="success-screen" class="hidden">
-                    <h2>She Said YES!!! 🎉</h2>
-                    <p>I love you forever and always. Let's start our forever chapter. ❤️</p>
+            <div class="slide" id="slide-2">
+                <div class="slide-card">
+                    <h2 id="view-t2-title">Our First Official Date</h2>
+                    <p id="view-t2-desc">I was incredibly nervous, but the moment you smiled, all my fears completely faded away. Best night ever.</p>
+                    <div id="media-container-2">
+                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=600" class="media-frame">
+                    </div>
                 </div>
             </div>
-        </div>
 
+            <div class="slide" id="slide-3">
+                <div class="slide-card">
+                    <h2 id="view-t3-title">Countless Adventures</h2>
+                    <p id="view-t3-desc">From lazy Sunday mornings to exploring brand new cities hand-in-hand, every second with you is a treasure.</p>
+                    <div id="media-container-3">
+                        <img src="https://images.unsplash.com/photo-1494548162494-384bba4ab999?q=80&w=600" class="media-frame">
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide" id="slide-4">
+                <div class="slide-card" style="position: relative;">
+                    <div id="question-box">
+                        <p id="view-letter-1">You make me laugh harder, love deeper, and smile bigger. You are my best friend and my absolute safest home.</p>
+                        <p id="view-letter-2" style="font-weight: 600;">I can't imagine a single second of my future without you standing right next to me...</p>
+                        <br>
+                        <h2>Will you marry me?</h2>
+                        <div class="btn-container">
+                            <button class="proposal-btn" id="yes-btn">YES! 💍</button>
+                            <button class="proposal-btn" id="no-btn">No</button>
+                        </div>
+                    </div>
+
+                    <div id="success-screen" class="hidden">
+                        <h2>She Said YES!!! 🎉</h2>
+                        <p>I love you forever and always. Let's start our forever chapter. ❤️</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <div class="nav-arrows">
@@ -315,24 +327,39 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <script>
-        // --- DISPLAY & SWIPE ANIMATION ENGINE ---
+        // --- DATA TRACKING ENGINE ---
         let activePageIndex = 0;
+        let deletedSlides = JSON.parse(localStorage.getItem('sw_deleted') || "[]");
+
         const swiperWrapper = document.getElementById('mainSwiper');
         const leftArrow = document.getElementById('slideLeftBtn');
         const rightArrow = document.getElementById('slideRightBtn');
 
-        function slidePage(direction) {
-            activePageIndex += direction;
-            if(activePageIndex < 0) activePageIndex = 0;
-            if(activePageIndex > 4) activePageIndex = 4;
-
-            swiperWrapper.style.transform = `translateX(-${activePageIndex * 100}vw)`;
-
-            leftArrow.disabled = (activePageIndex === 0);
-            rightArrow.disabled = (activePageIndex === 4);
+        function getVisibleSlides() {
+            const allSlides = [0, 1, 2, 3, 4];
+            return allSlides.filter(id => !deletedSlides.includes(id));
         }
 
-        // --- DASHBOARD WIZARD CONTROLLER ---
+        function slidePage(direction) {
+            const visibleSlides = getVisibleSlides();
+            
+            // Adjust tracking pointer bounds
+            activePageIndex += direction;
+            if(activePageIndex < 0) activePageIndex = 0;
+            if(activePageIndex >= visibleSlides.length) activePageIndex = visibleSlides.length - 1;
+
+            // Update entire swiper layout widths depending on visible counts
+            document.documentElement.style.setProperty('--swiper-width', `${visibleSlides.length * 100}vw`);
+            
+            // Shift container viewport window safely
+            swiperWrapper.style.transform = `translateX(-${activePageIndex * 100}vw)`;
+
+            // Toggle controls state visibility
+            leftArrow.disabled = (activePageIndex === 0);
+            rightArrow.disabled = (activePageIndex === visibleSlides.length - 1);
+        }
+
+        // --- DASHBOARD CONTROLS ---
         let wizardStep = 1;
 
         function openAdmin() {
@@ -365,14 +392,38 @@
                 return;
             }
 
-            activePageIndex = wizardStep - 1;
-            slidePage(0); 
+            // Move view preview automatically to slide mapping matching wizard step
+            const visibleSlides = getVisibleSlides();
+            const targetSlideId = wizardStep - 1;
+            const viewIndex = visibleSlides.indexOf(targetSlideId);
+
+            if (viewIndex !== -1) {
+                activePageIndex = viewIndex;
+                slidePage(0);
+            }
 
             saveData();
             updateLiveDOM();
         }
 
-        // --- ENGINE STORAGE AND RENDER ---
+        // --- MANAGE DYNAMIC SLIDE REMOVAL ---
+        function deleteCurrentSlide(slideNumber) {
+            if(confirm("Are you sure you want to remove this slide from your presentation layout?")) {
+                if(!deletedSlides.includes(slideNumber)) {
+                    deletedSlides.push(slideNumber);
+                    localStorage.setItem('sw_deleted', JSON.stringify(deletedSlides));
+                }
+                
+                // Physically remove slide presentation frame node layout instantly
+                const element = document.getElementById(`slide-${slideNumber}`);
+                if(element) element.remove();
+                
+                alert("Slide removed successfully!");
+                changeStep(1); // Auto advance forward past deleted segment panel workspace
+            }
+        }
+
+        // --- PERSISTENT STORAGE AND BROWSER RENDERING ---
         function saveData() {
             localStorage.setItem('sw_title', document.getElementById('edit-main-title').value);
             localStorage.setItem('sw_sub', document.getElementById('edit-main-sub').value);
@@ -404,6 +455,12 @@
         }
 
         function loadSavedData() {
+            // Apply deletions cleanly on bootstrap launch execution
+            deletedSlides.forEach(slideId => {
+                const element = document.getElementById(`slide-${slideId}`);
+                if(element) element.remove();
+            });
+
             if(localStorage.getItem('sw_title')) {
                 document.getElementById('edit-main-title').value = localStorage.getItem('sw_title');
                 document.getElementById('edit-main-sub').value = localStorage.getItem('sw_sub');
@@ -417,30 +474,38 @@
                 document.getElementById('edit-letter-2').value = localStorage.getItem('sw_l2');
             }
             updateLiveDOM();
+            slidePage(0); // Recalculate layout sizes completely
         }
 
         function updateLiveDOM() {
             document.getElementById('view-main-title').innerText = document.getElementById('edit-main-title').value;
             document.getElementById('view-main-sub').innerText = document.getElementById('edit-main-sub').value;
-            document.getElementById('view-t1-title').innerText = document.getElementById('edit-t1-title').value;
-            document.getElementById('view-t1-desc').innerText = document.getElementById('edit-t1-desc').value;
-            document.getElementById('view-t2-title').innerText = document.getElementById('edit-t2-title').value;
-            document.getElementById('view-t2-desc').innerText = document.getElementById('edit-t2-desc').value;
-            document.getElementById('view-t3-title').innerText = document.getElementById('edit-t3-title').value;
-            document.getElementById('view-t3-desc').innerText = document.getElementById('edit-t3-desc').value;
+            
+            if(!deletedSlides.includes(1)) {
+                document.getElementById('view-t1-title').innerText = document.getElementById('edit-t1-title').value;
+                document.getElementById('view-t1-desc').innerText = document.getElementById('edit-t1-desc').value;
+                displayMediaContainer('sw_m1', 'media-container-1');
+            }
+            if(!deletedSlides.includes(2)) {
+                document.getElementById('view-t2-title').innerText = document.getElementById('edit-t2-title').value;
+                document.getElementById('view-t2-desc').innerText = document.getElementById('edit-t2-desc').value;
+                displayMediaContainer('sw_m2', 'media-container-2');
+            }
+            if(!deletedSlides.includes(3)) {
+                document.getElementById('view-t3-title').innerText = document.getElementById('edit-t3-title').value;
+                document.getElementById('view-t3-desc').innerText = document.getElementById('edit-t3-desc').value;
+                displayMediaContainer('sw_m3', 'media-container-3');
+            }
+            
             document.getElementById('view-letter-1').innerText = document.getElementById('edit-letter-1').value;
             document.getElementById('view-letter-2').innerText = document.getElementById('edit-letter-2').value;
-
-            displayMediaContainer('sw_m1', 'media-container-1');
-            displayMediaContainer('sw_m2', 'media-container-2');
-            displayMediaContainer('sw_m3', 'media-container-3');
         }
 
         function displayMediaContainer(storageKey, containerId) {
             const dataStr = localStorage.getItem(storageKey);
             const mimeType = localStorage.getItem(storageKey + '_rawType');
-            if (dataStr && mimeType) {
-                const targetNode = document.getElementById(containerId);
+            const targetNode = document.getElementById(containerId);
+            if (dataStr && mimeType && targetNode) {
                 targetNode.innerHTML = '';
                 if(mimeType.startsWith('video/')) {
                     const video = document.createElement('video');
@@ -454,7 +519,7 @@
             }
         }
 
-        // --- BUTTON MOTIONS ---
+        // --- BUTTON HANDLING ---
         const noBtn = document.getElementById('no-btn');
         const yesBtn = document.getElementById('yes-btn');
         const questionBox = document.getElementById('question-box');

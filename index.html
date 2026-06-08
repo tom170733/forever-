@@ -164,11 +164,11 @@
         .arrow:disabled { opacity: 0.2; cursor: not-allowed; border-color: #ccc; color: #ccc; }
 
         /* --- PROPOSAL SYSTEM --- */
-        .btn-container { display: flex; gap: 30px; justify-content: center; align-items: center; margin-top: 30px; min-height: 80px; position: relative;}
-        .proposal-btn { padding: 15px 40px; font-size: 1.2rem; font-weight: 600; border: none; border-radius: 50px; cursor: pointer; transition: all 0.15s ease; box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
+        .btn-container { display: flex; gap: 30px; justify-content: center; align-items: center; margin-top: 30px; min-height: 80px;}
+        .proposal-btn { padding: 15px 40px; font-size: 1.2rem; font-weight: 600; border: none; border-radius: 50px; cursor: pointer; transition: all 0.2s; box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
         #yes-btn { background-color: var(--primary-pink); color: white; }
         #yes-btn:hover { transform: scale(1.1); background-color: #ff3355; }
-        #no-btn { background-color: #fff; color: var(--text-color); transition: left 0.1s ease, top 0.1s ease; }
+        #no-btn { background-color: #fff; color: var(--text-color); z-index: 1000; }
         .hidden { display: none !important; }
 
         #success-screen h2 { font-size: 4.5rem; }
@@ -315,16 +315,16 @@
                         <p id="view-letter-2" style="font-weight: 600;">I can't imagine a single second of my future without you standing right next to me...</p>
                         <div id="media-container-4"></div>
                         <br>
-                        <h2>Will you be my girlfriend? 🥺</h2>
+                        <h2>Will you marry me?</h2>
                         <div class="btn-container">
-                            <button class="proposal-btn" id="yes-btn">YES! ❤️</button>
+                            <button class="proposal-btn" id="yes-btn">YES! 💍</button>
                             <button class="proposal-btn" id="no-btn">No</button>
                         </div>
                     </div>
 
                     <div id="success-screen" class="hidden">
-                        <h2>YAY!!! 🎉 Can't wait to be yours!</h2>
-                        <p>I love you forever and always. Let's start our official chapter together. 💕</p>
+                        <h2>She Said YES!!! 🎉</h2>
+                        <p>I love you forever and always. Let's start our forever chapter. ❤️</p>
                     </div>
                 </div>
             </div>
@@ -525,31 +525,20 @@
             }
         }
 
-        // --- THE FUNNY RUNNING NO BUTTON SYSTEM ---
+        // --- BUTTON HANDLING ---
         const noBtn = document.getElementById('no-btn');
         const yesBtn = document.getElementById('yes-btn');
         const questionBox = document.getElementById('question-box');
         const successScreen = document.getElementById('success-screen');
 
         const moveNoButton = () => {
-            // Get boundaries relative to the viewport window to make it run completely away
-            const maxWidth = window.innerWidth - noBtn.offsetWidth - 40;
-            const maxHeight = window.innerHeight - noBtn.offsetHeight - 40;
-            
-            const randomX = Math.floor(Math.random() * maxWidth);
-            const randomY = Math.floor(Math.random() * maxHeight);
-
-            noBtn.style.position = 'fixed'; 
-            noBtn.style.left = `${randomX}px`; 
-            noBtn.style.top = `${randomY}px`;
+            const pad = 70;
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - pad * 2) + pad;
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - pad * 2) + pad;
+            noBtn.style.position = 'fixed'; noBtn.style.left = `${x}px`; noBtn.style.top = `${y}px`;
         };
-
-        // Triggers the escape trick immediately on hovering or touching
         noBtn.addEventListener('mouseover', moveNoButton);
-        noBtn.addEventListener('touchstart', (e) => { 
-            e.preventDefault(); 
-            moveNoButton(); 
-        });
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNoButton(); });
 
         yesBtn.addEventListener('click', () => {
             questionBox.classList.add('hidden');

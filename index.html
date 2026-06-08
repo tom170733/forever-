@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Story ❤️</title>
+    <title>For Someone Special ❤️</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght=700&family=Poppins:wght=300;400;600&display=swap" rel="stylesheet">
@@ -22,7 +22,7 @@
             font-family: 'Poppins', sans-serif;
             background: var(--bg-gradient);
             color: var(--text-color);
-            overflow: hidden; /* Disables vertical scroll entirely */
+            overflow: hidden;
         }
 
         /* --- SECRET ADMIN TRIGGER (BOTTOM RIGHT) --- */
@@ -63,19 +63,13 @@
         .admin-panel input[type="text"], .admin-panel textarea {
             padding: 8px; border: none; border-radius: 6px; background: rgba(255,255,255,0.1); color: white; font-family: inherit; font-size: 0.85rem;
         }
-        .admin-panel input[type="file"] {
-            margin-top: 4px; color: #ffe5ec; font-size: 0.8rem;
-        }
-        .admin-panel input[type="text"]:focus, .admin-panel textarea:focus { background: rgba(255,255,255,0.2); outline: none; }
+        .admin-panel input[type="file"] { margin-top: 4px; color: #ffe5ec; font-size: 0.8rem; }
         .wizard-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); }
         .admin-btn { padding: 8px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.85rem; transition: background 0.2s; }
         .btn-next { background: var(--primary-pink); color: white; }
-        .btn-next:hover { background: #ff3355; }
         .btn-prev { background: #4a4e69; color: white; }
         .btn-prev:disabled { opacity: 0.3; cursor: not-allowed; }
         .btn-close { background: #ff4d6d; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; border: none; cursor: pointer; }
-        .btn-delete { background: #e63946; color: white; margin-top: 15px; grid-column: span 2; width: fit-content; padding: 6px 12px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer;}
-        .btn-delete:hover { background: #c1121f; }
 
         /* --- HORIZONTAL SWIPE CONTAINER --- */
         .swiper-container {
@@ -85,7 +79,7 @@
         }
         .swiper-wrapper {
             display: flex;
-            width: var(--swiper-width, 500vw);
+            width: 300vw; /* 3 Slides total */
             height: 100vh;
             transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
             padding-top: 40px;
@@ -116,13 +110,26 @@
         }
 
         h1, h2 { font-family: 'Dancing Script', cursive; color: var(--primary-pink); margin-bottom: 15px; }
-        h1 { font-size: 4rem; animation: heartbeat 1.8s infinite; }
-        h2 { font-size: 3rem; }
+        h1 { font-size: 3.5rem; animation: heartbeat 1.8s infinite; }
+        h2 { font-size: 2.8rem; }
         p { font-size: 1.1rem; line-height: 1.6; color: #4a4e69; margin-bottom: 15px; }
 
         @keyframes heartbeat {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.03); }
+        }
+
+        @keyframes cartoonWobble {
+            0% { transform: translateX(0) scale(1); }
+            20% { transform: translateX(-10px) scaleX(0.8); }
+            40% { transform: translateX(10px) scaleX(1.2); }
+            60% { transform: translateX(-5px) scaleX(0.9); }
+            80% { transform: translateX(5px) scaleX(1.05); }
+            100% { transform: translateX(0) scale(1); }
+        }
+
+        .cartoon-panic {
+            animation: cartoonWobble 0.2s ease-in-out;
         }
 
         .media-frame {
@@ -164,14 +171,14 @@
         .arrow:disabled { opacity: 0.2; cursor: not-allowed; border-color: #ccc; color: #ccc; }
 
         /* --- PROPOSAL SYSTEM --- */
-        .btn-container { display: flex; gap: 30px; justify-content: center; align-items: center; margin-top: 30px; min-height: 80px;}
-        .proposal-btn { padding: 15px 40px; font-size: 1.2rem; font-weight: 600; border: none; border-radius: 50px; cursor: pointer; transition: all 0.2s; box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
-        #yes-btn { background-color: var(--primary-pink); color: white; }
+        .btn-container { display: flex; gap: 30px; justify-content: center; align-items: center; margin-top: 30px; min-height: 80px; position: relative;}
+        .proposal-btn { padding: 15px 40px; font-size: 1.2rem; font-weight: 600; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
+        #yes-btn { background-color: var(--primary-pink); color: white; transition: transform 0.2s; }
         #yes-btn:hover { transform: scale(1.1); background-color: #ff3355; }
-        #no-btn { background-color: #fff; color: var(--text-color); z-index: 1000; }
+        #no-btn { background-color: #fff; color: var(--text-color); position: relative; transition: left 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), top 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .hidden { display: none !important; }
 
-        #success-screen h2 { font-size: 4.5rem; }
+        #success-screen h2 { font-size: 3.5rem; }
     </style>
 </head>
 <body>
@@ -183,85 +190,52 @@
         
         <div class="wizard-step active" id="step-1">
             <div class="input-group">
-                <label>Slide 1: Large Header Title</label>
-                <input type="text" id="edit-main-title" value="To My Absolute Favorite Person...">
+                <label>Slide 1: Greeting Title</label>
+                <input type="text" id="edit-main-title" value="Hey Beautiful...">
             </div>
             <div class="input-group">
                 <label>Slide 1: Picture / Video File</label>
                 <input type="file" id="edit-main-media" accept="image/*,video/*">
             </div>
             <div class="input-group" style="grid-column: span 2;">
-                <label>Slide 1: Subtext Description</label>
-                <input type="text" id="edit-main-sub" value="I built this little corner of the internet just for us. Swap pages using arrows below.">
+                <label>Slide 1: Subtext</label>
+                <input type="text" id="edit-main-sub" value="I made a little space just for you. Use the arrow below to see it.">
             </div>
         </div>
 
         <div class="wizard-step" id="step-2">
             <div class="input-group">
-                <label>Slide 2: Milestone Title</label>
-                <input type="text" id="edit-t1-title" value="The Day We Met">
+                <label>Slide 2: Romance Title</label>
+                <input type="text" id="edit-t1-title" value="Since We Met...">
             </div>
             <div class="input-group">
                 <label>Slide 2: Picture / Video File</label>
                 <input type="file" id="edit-t1-media" accept="image/*,video/*">
             </div>
             <div class="input-group" style="grid-column: span 2;">
-                <label>Description</label>
-                <textarea id="edit-t1-desc" rows="1">It started with a beautiful conversation, but deep down, I already knew my life was changing forever.</textarea>
+                <label>Your Message to Her</label>
+                <textarea id="edit-t1-desc" rows="2">Even though we just recently met, meeting you has been the absolute best part of my days. Every time we talk, you bring a huge smile to my face, and I can't stop thinking about how lucky I am that our paths crossed.</textarea>
             </div>
-            <button class="btn-delete" onclick="deleteCurrentSlide(1)">❌ Delete This Slide</button>
         </div>
 
         <div class="wizard-step" id="step-3">
             <div class="input-group">
-                <label>Slide 3: Milestone Title</label>
-                <input type="text" id="edit-t2-title" value="Our First Official Date">
-            </div>
-            <div class="input-group">
-                <label>Slide 3: Picture / Video File</label>
-                <input type="file" id="edit-t2-media" accept="image/*,video/*">
-            </div>
-            <div class="input-group" style="grid-column: span 2;">
-                <label>Description</label>
-                <textarea id="edit-t2-desc" rows="1">I was incredibly nervous, but the moment you smiled, all my fears completely faded away. Best night ever.</textarea>
-            </div>
-            <button class="btn-delete" onclick="deleteCurrentSlide(2)">❌ Delete This Slide</button>
-        </div>
-
-        <div class="wizard-step" id="step-4">
-            <div class="input-group">
-                <label>Slide 4: Milestone Title</label>
-                <input type="text" id="edit-t3-title" value="Countless Adventures">
-            </div>
-            <div class="input-group">
-                <label>Slide 4: Picture / Video File</label>
-                <input type="file" id="edit-t3-media" accept="image/*,video/*">
-            </div>
-            <div class="input-group" style="grid-column: span 2;">
-                <label>Description</label>
-                <textarea id="edit-t3-desc" rows="1">From lazy Sunday mornings to exploring brand new cities hand-in-hand, every second with you is a treasure.</textarea>
-            </div>
-            <button class="btn-delete" onclick="deleteCurrentSlide(3)">❌ Delete This Slide</button>
-        </div>
-
-        <div class="wizard-step" id="step-5">
-            <div class="input-group">
-                <label>Slide 5: Proposal Media File</label>
+                <label>Slide 3: Final Media File</label>
                 <input type="file" id="edit-letter-media" accept="image/*,video/*">
             </div>
             <div class="input-group">
-                <label>Slide 5: Letter Paragraph 1</label>
-                <textarea id="edit-letter-1" rows="1">You make me laugh harder, love deeper, and smile bigger. You are my best friend and my absolute safest home.</textarea>
+                <label>Slide 3: Closing Line 1</label>
+                <textarea id="edit-letter-1" rows="1">I really like who I am when I am with you, and I want to see where this beautiful beginning takes us...</textarea>
             </div>
             <div class="input-group" style="grid-column: span 2; margin-top: 5px;">
-                <label>Slide 5: Letter Paragraph 2</label>
-                <textarea id="edit-letter-2" rows="1">I can't imagine a single second of my future without you standing right next to me...</textarea>
+                <label>Slide 3: Closing Line 2</label>
+                <textarea id="edit-letter-2" rows="1">So, I have a very important question to ask you...</textarea>
             </div>
         </div>
 
         <div class="wizard-footer">
             <button class="admin-btn btn-prev" id="prevBtn" onclick="changeStep(-1)" disabled>Back</button>
-            <span id="stepIndicator" style="font-size:0.85rem;">Step 1 of 5</span>
+            <span id="stepIndicator" style="font-size:0.85rem;">Step 1 of 3</span>
             <button class="admin-btn btn-next" id="nextBtn" onclick="changeStep(1)">Next Step</button>
         </div>
     </div>
@@ -272,59 +246,37 @@
             
             <div class="slide" id="slide-0">
                 <div class="slide-card">
-                    <h1 id="view-main-title">To My Absolute Favorite Person...</h1>
-                    <p id="view-main-sub">I built this little corner of the internet just for us. Swap pages using arrows below.</p>
+                    <h1 id="view-main-title">Hey Beautiful...</h1>
+                    <p id="view-main-sub">I made a little space just for you. Use the arrow below to see it.</p>
                     <div id="media-container-0"></div>
                 </div>
             </div>
 
             <div class="slide" id="slide-1">
                 <div class="slide-card">
-                    <h2 id="view-t1-title">The Day We Met</h2>
-                    <p id="view-t1-desc">It started with a beautiful conversation, but deep down, I already knew my life was changing forever.</p>
-                    <div id="media-container-1">
-                        <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=600" class="media-frame">
-                    </div>
+                    <h2 id="view-t1-title">Since We Met...</h2>
+                    <p id="view-t1-desc">Even though we just recently met, meeting you has been the absolute best part of my days. Every time we talk, you bring a huge smile to my face, and I can't stop thinking about how lucky I am that our paths crossed.</p>
+                    <div id="media-container-1"></div>
                 </div>
             </div>
 
             <div class="slide" id="slide-2">
-                <div class="slide-card">
-                    <h2 id="view-t2-title">Our First Official Date</h2>
-                    <p id="view-t2-desc">I was incredibly nervous, but the moment you smiled, all my fears completely faded away. Best night ever.</p>
-                    <div id="media-container-2">
-                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=600" class="media-frame">
-                    </div>
-                </div>
-            </div>
-
-            <div class="slide" id="slide-3">
-                <div class="slide-card">
-                    <h2 id="view-t3-title">Countless Adventures</h2>
-                    <p id="view-t3-desc">From lazy Sunday mornings to exploring brand new cities hand-in-hand, every second with you is a treasure.</p>
-                    <div id="media-container-3">
-                        <img src="https://images.unsplash.com/photo-1494548162494-384bba4ab999?q=80&w=600" class="media-frame">
-                    </div>
-                </div>
-            </div>
-
-            <div class="slide" id="slide-4">
                 <div class="slide-card" style="position: relative;">
                     <div id="question-box">
-                        <p id="view-letter-1">You make me laugh harder, love deeper, and smile bigger. You are my best friend and my absolute safest home.</p>
-                        <p id="view-letter-2" style="font-weight: 600;">I can't imagine a single second of my future without you standing right next to me...</p>
+                        <p id="view-letter-1">I really like who I am when I am with you, and I want to see where this beautiful beginning takes us...</p>
+                        <p id="view-letter-2" style="font-weight: 600;">So, I have a very important question to ask you...</p>
                         <div id="media-container-4"></div>
                         <br>
-                        <h2>Will you marry me?</h2>
+                        <h2>Will you be my girlfriend? 🥺</h2>
                         <div class="btn-container">
-                            <button class="proposal-btn" id="yes-btn">YES! 💍</button>
+                            <button class="proposal-btn" id="yes-btn">YES! ❤️</button>
                             <button class="proposal-btn" id="no-btn">No</button>
                         </div>
                     </div>
 
                     <div id="success-screen" class="hidden">
-                        <h2>She Said YES!!! 🎉</h2>
-                        <p>I love you forever and always. Let's start our forever chapter. ❤️</p>
+                        <h2>YAY!!! 🎉 Can't wait to be yours!</h2>
+                        <p>You just made me the happiest guy alive. Let's make wonderful memories together. 💕</p>
                     </div>
                 </div>
             </div>
@@ -340,31 +292,20 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <script>
-        // --- DISPLAY ENGINE ---
         let activePageIndex = 0;
-        let deletedSlides = JSON.parse(localStorage.getItem('sw_deleted') || "[]");
-
         const swiperWrapper = document.getElementById('mainSwiper');
         const leftArrow = document.getElementById('slideLeftBtn');
         const rightArrow = document.getElementById('slideRightBtn');
 
-        function getVisibleSlides() {
-            const allSlides = [0, 1, 2, 3, 4];
-            return allSlides.filter(id => !deletedSlides.includes(id));
-        }
-
         function slidePage(direction) {
-            const visibleSlides = getVisibleSlides();
-            
             activePageIndex += direction;
             if(activePageIndex < 0) activePageIndex = 0;
-            if(activePageIndex >= visibleSlides.length) activePageIndex = visibleSlides.length - 1;
+            if(activePageIndex >= 3) activePageIndex = 2;
 
-            document.documentElement.style.setProperty('--swiper-width', `${visibleSlides.length * 100}vw`);
             swiperWrapper.style.transform = `translateX(-${activePageIndex * 100}vw)`;
 
             leftArrow.disabled = (activePageIndex === 0);
-            rightArrow.disabled = (activePageIndex === visibleSlides.length - 1);
+            rightArrow.disabled = (activePageIndex === 2);
         }
 
         // --- DASHBOARD CONTROLS ---
@@ -391,59 +332,34 @@
             document.getElementById(`step-${wizardStep}`).classList.add('active');
 
             document.getElementById('prevBtn').disabled = (wizardStep === 1);
-            document.getElementById('nextBtn').innerText = (wizardStep === 5) ? "Save & Close" : "Next Step";
-            document.getElementById('stepIndicator').innerText = `Step ${wizardStep} of 5`;
+            document.getElementById('nextBtn').innerText = (wizardStep === 3) ? "Save & Close" : "Next Step";
+            document.getElementById('stepIndicator').innerText = `Step ${wizardStep} of 3`;
 
-            if(wizardStep > 5) {
-                wizardStep = 5;
+            if(wizardStep > 3) {
+                wizardStep = 3;
                 closeAdmin();
                 return;
             }
 
-            const visibleSlides = getVisibleSlides();
-            const targetSlideId = wizardStep - 1;
-            const viewIndex = visibleSlides.indexOf(targetSlideId);
-
-            if (viewIndex !== -1) {
-                activePageIndex = viewIndex;
-                slidePage(0);
-            }
+            activePageIndex = wizardStep - 1;
+            slidePage(0);
 
             saveData();
             updateLiveDOM();
         }
 
-        function deleteCurrentSlide(slideNumber) {
-            if(confirm("Are you sure you want to remove this slide?")) {
-                if(!deletedSlides.includes(slideNumber)) {
-                    deletedSlides.push(slideNumber);
-                    localStorage.setItem('sw_deleted', JSON.stringify(deletedSlides));
-                }
-                const element = document.getElementById(`slide-${slideNumber}`);
-                if(element) element.remove();
-                alert("Slide removed!");
-                changeStep(1);
-            }
-        }
-
         // --- PERSISTENT STORAGE ENGINE ---
         function saveData() {
-            localStorage.setItem('sw_title', document.getElementById('edit-main-title').value);
-            localStorage.setItem('sw_sub', document.getElementById('edit-main-sub').value);
-            localStorage.setItem('sw_t1t', document.getElementById('edit-t1-title').value);
-            localStorage.setItem('sw_t1d', document.getElementById('edit-t1-desc').value);
-            localStorage.setItem('sw_t2t', document.getElementById('edit-t2-title').value);
-            localStorage.setItem('sw_t2d', document.getElementById('edit-t2-desc').value);
-            localStorage.setItem('sw_t3t', document.getElementById('edit-t3-title').value);
-            localStorage.setItem('sw_t3d', document.getElementById('edit-t3-desc').value);
-            localStorage.setItem('sw_l1', document.getElementById('edit-letter-1').value);
-            localStorage.setItem('sw_l2', document.getElementById('edit-letter-2').value);
+            localStorage.setItem('g_title', document.getElementById('edit-main-title').value);
+            localStorage.setItem('g_sub', document.getElementById('edit-main-sub').value);
+            localStorage.setItem('g_t1t', document.getElementById('edit-t1-title').value);
+            localStorage.setItem('g_t1d', document.getElementById('edit-t1-desc').value);
+            localStorage.setItem('g_l1', document.getElementById('edit-letter-1').value);
+            localStorage.setItem('g_l2', document.getElementById('edit-letter-2').value);
 
-            storeMedia('edit-main-media', 'sw_m0');
-            storeMedia('edit-t1-media', 'sw_m1');
-            storeMedia('edit-t2-media', 'sw_m2');
-            storeMedia('edit-t3-media', 'sw_m3');
-            storeMedia('edit-letter-media', 'sw_m4');
+            storeMedia('edit-main-media', 'g_m0');
+            storeMedia('edit-t1-media', 'g_m1');
+            storeMedia('edit-letter-media', 'g_m4');
         }
 
         function storeMedia(inputId, storageKey) {
@@ -460,22 +376,13 @@
         }
 
         function loadSavedData() {
-            deletedSlides.forEach(slideId => {
-                const element = document.getElementById(`slide-${slideId}`);
-                if(element) element.remove();
-            });
-
-            if(localStorage.getItem('sw_title')) {
-                document.getElementById('edit-main-title').value = localStorage.getItem('sw_title');
-                document.getElementById('edit-main-sub').value = localStorage.getItem('sw_sub');
-                document.getElementById('edit-t1-title').value = localStorage.getItem('sw_t1t');
-                document.getElementById('edit-t1-desc').value = localStorage.getItem('sw_t1d');
-                document.getElementById('edit-t2-title').value = localStorage.getItem('sw_t2t');
-                document.getElementById('edit-t2-desc').value = localStorage.getItem('sw_t2d');
-                document.getElementById('edit-t3-title').value = localStorage.getItem('sw_t3t');
-                document.getElementById('edit-t3-desc').value = localStorage.getItem('sw_t3d');
-                document.getElementById('edit-letter-1').value = localStorage.getItem('sw_l1');
-                document.getElementById('edit-letter-2').value = localStorage.getItem('sw_l2');
+            if(localStorage.getItem('g_title')) {
+                document.getElementById('edit-main-title').value = localStorage.getItem('g_title');
+                document.getElementById('edit-main-sub').value = localStorage.getItem('g_sub');
+                document.getElementById('edit-t1-title').value = localStorage.getItem('g_t1t');
+                document.getElementById('edit-t1-desc').value = localStorage.getItem('g_t1d');
+                document.getElementById('edit-letter-1').value = localStorage.getItem('g_l1');
+                document.getElementById('edit-letter-2').value = localStorage.getItem('g_l2');
             }
             updateLiveDOM();
             slidePage(0);
@@ -484,27 +391,15 @@
         function updateLiveDOM() {
             document.getElementById('view-main-title').innerText = document.getElementById('edit-main-title').value;
             document.getElementById('view-main-sub').innerText = document.getElementById('edit-main-sub').value;
-            displayMediaContainer('sw_m0', 'media-container-0');
+            displayMediaContainer('g_m0', 'media-container-0');
             
-            if(!deletedSlides.includes(1)) {
-                document.getElementById('view-t1-title').innerText = document.getElementById('edit-t1-title').value;
-                document.getElementById('view-t1-desc').innerText = document.getElementById('edit-t1-desc').value;
-                displayMediaContainer('sw_m1', 'media-container-1');
-            }
-            if(!deletedSlides.includes(2)) {
-                document.getElementById('view-t2-title').innerText = document.getElementById('edit-t2-title').value;
-                document.getElementById('view-t2-desc').innerText = document.getElementById('edit-t2-desc').value;
-                displayMediaContainer('sw_m2', 'media-container-2');
-            }
-            if(!deletedSlides.includes(3)) {
-                document.getElementById('view-t3-title').innerText = document.getElementById('edit-t3-title').value;
-                document.getElementById('view-t3-desc').innerText = document.getElementById('edit-t3-desc').value;
-                displayMediaContainer('sw_m3', 'media-container-3');
-            }
+            document.getElementById('view-t1-title').innerText = document.getElementById('edit-t1-title').value;
+            document.getElementById('view-t1-desc').innerText = document.getElementById('edit-t1-desc').value;
+            displayMediaContainer('g_m1', 'media-container-1');
             
             document.getElementById('view-letter-1').innerText = document.getElementById('edit-letter-1').value;
             document.getElementById('view-letter-2').innerText = document.getElementById('edit-letter-2').value;
-            displayMediaContainer('sw_m4', 'media-container-4');
+            displayMediaContainer('g_m4', 'media-container-4');
         }
 
         function displayMediaContainer(storageKey, containerId) {
@@ -525,26 +420,41 @@
             }
         }
 
-        // --- BUTTON HANDLING ---
+        // --- CARTOON RUNNING BUTTON ENGINE ---
         const noBtn = document.getElementById('no-btn');
         const yesBtn = document.getElementById('yes-btn');
         const questionBox = document.getElementById('question-box');
         const successScreen = document.getElementById('success-screen');
 
-        const moveNoButton = () => {
-            const pad = 70;
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - pad * 2) + pad;
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - pad * 2) + pad;
-            noBtn.style.position = 'fixed'; noBtn.style.left = `${x}px`; noBtn.style.top = `${y}px`;
+        const escapeCartoonStyle = () => {
+            // Trigger the panic wobble animation effect
+            noBtn.classList.add('cartoon-panic');
+            setTimeout(() => { noBtn.classList.remove('cartoon-panic'); }, 200);
+
+            // Fly completely away to a random place on screen
+            const padding = 50;
+            const boundsWidth = window.innerWidth - noBtn.offsetWidth - padding * 2;
+            const boundsHeight = window.innerHeight - noBtn.offsetHeight - padding * 2;
+            
+            const randomX = Math.floor(Math.random() * boundsWidth) + padding;
+            const randomY = Math.floor(Math.random() * boundsHeight) + padding;
+
+            noBtn.style.position = 'fixed'; 
+            noBtn.style.left = `${randomX}px`; 
+            noBtn.style.top = `${randomY}px`;
         };
-        noBtn.addEventListener('mouseover', moveNoButton);
-        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNoButton(); });
+
+        noBtn.addEventListener('mouseover', escapeCartoonStyle);
+        noBtn.addEventListener('touchstart', (e) => { 
+            e.preventDefault(); 
+            escapeCartoonStyle(); 
+        });
 
         yesBtn.addEventListener('click', () => {
             questionBox.classList.add('hidden');
             successScreen.classList.remove('hidden');
 
-            const length = 12 * 1000;
+            const length = 10 * 1000;
             const endAnim = Date.now() + length;
             const confDefaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 10001 };
             function scopeRange(min, max) { return Math.random() * (max - min) + min; }
@@ -552,7 +462,7 @@
             const loopRunner = setInterval(function() {
               const remaining = endAnim - Date.now();
               if (remaining <= 0) return clearInterval(loopRunner);
-              const count = 60 * (remaining / length);
+              const count = 50 * (remaining / length);
               confetti({ ...confDefaults, count, origin: { x: scopeRange(0.1, 0.3), y: Math.random() - 0.2 } });
               confetti({ ...confDefaults, count, origin: { x: scopeRange(0.7, 0.9), y: Math.random() - 0.2 } });
             }, 250);

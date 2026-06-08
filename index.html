@@ -25,6 +25,71 @@
             overflow: hidden;
         }
 
+        /* --- FRONT GATE PASS PROTECTION SCREEN --- */
+        #gatekeeper-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg-gradient);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999999;
+            padding: 20px;
+            transition: opacity 0.5s ease, visibility 0.5s;
+        }
+        .gate-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(15px);
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.15);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        .gate-card h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: var(--primary-pink);
+            margin-bottom: 10px;
+        }
+        .gate-card p {
+            font-size: 0.95rem;
+            color: #4a4e69;
+            margin-bottom: 20px;
+        }
+        .gate-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ffb3c1;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .gate-input:focus {
+            border-color: var(--primary-pink);
+        }
+        .gate-btn {
+            background: var(--primary-pink);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+            transition: background 0.2s;
+        }
+        .gate-btn:hover {
+            background: #ff3355;
+        }
+
         /* --- SECRET ADMIN TRIGGER (BOTTOM RIGHT) --- */
         #secret-trigger {
             position: fixed;
@@ -79,7 +144,7 @@
         }
         .swiper-wrapper {
             display: flex;
-            width: 300vw; /* 3 Slides total */
+            width: 300vw;
             height: 100vh;
             transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
             padding-top: 40px;
@@ -119,17 +184,16 @@
             50% { transform: scale(1.03); }
         }
 
-        @keyframes cartoonWobble {
-            0% { transform: translateX(0) scale(1); }
-            20% { transform: translateX(-10px) scaleX(0.8); }
-            40% { transform: translateX(10px) scaleX(1.2); }
-            60% { transform: translateX(-5px) scaleX(0.9); }
-            80% { transform: translateX(5px) scaleX(1.05); }
-            100% { transform: translateX(0) scale(1); }
+        /* --- CARTOON SCRAMBLE RUNNING STYLE --- */
+        @keyframes cartoonScramble {
+            0% { transform: scale(1) skewX(0deg); }
+            25% { transform: scale(0.9, 1.1) skewX(-15deg); }
+            50% { transform: scale(1.1, 0.9) skewX(15deg); }
+            75% { transform: scale(0.95, 1.05) skewX(-5deg); }
+            100% { transform: scale(1) skewX(0deg); }
         }
-
-        .cartoon-panic {
-            animation: cartoonWobble 0.2s ease-in-out;
+        .cartoon-run-active {
+            animation: cartoonScramble 0.3s linear infinite;
         }
 
         .media-frame {
@@ -173,15 +237,31 @@
         /* --- PROPOSAL SYSTEM --- */
         .btn-container { display: flex; gap: 30px; justify-content: center; align-items: center; margin-top: 30px; min-height: 80px; position: relative;}
         .proposal-btn { padding: 15px 40px; font-size: 1.2rem; font-weight: 600; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
-        #yes-btn { background-color: var(--primary-pink); color: white; transition: transform 0.2s; }
+        #yes-btn { background-color: var(--primary-pink); color: white; transition: transform 0.2s; z-index: 10; }
         #yes-btn:hover { transform: scale(1.1); background-color: #ff3355; }
-        #no-btn { background-color: #fff; color: var(--text-color); position: relative; transition: left 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), top 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
+        #no-btn { 
+            background-color: #fff; 
+            color: var(--text-color); 
+            position: relative; 
+            z-index: 1000;
+            transition: left 0.4s cubic-bezier(0.19, 1, 0.22, 1), top 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
         .hidden { display: none !important; }
 
         #success-screen h2 { font-size: 3.5rem; }
     </style>
 </head>
 <body>
+
+    <div id="gatekeeper-screen">
+        <div class="gate-card">
+            <h2>Access Required 🔒</h2>
+            <p>This web page was built exclusively for someone very special. Enter the password to unlock it.</p>
+            <input type="text" id="visitor-pass-input" class="gate-input" placeholder="Enter Password Here...">
+            <button class="gate-btn" onclick="checkVisitorPassword()">Unlock ❤️</button>
+        </div>
+    </div>
 
     <div id="secret-trigger" onclick="openAdmin()">⚙️</div>
 
@@ -197,9 +277,13 @@
                 <label>Slide 1: Picture / Video File</label>
                 <input type="file" id="edit-main-media" accept="image/*,video/*">
             </div>
-            <div class="input-group" style="grid-column: span 2;">
+            <div class="input-group">
                 <label>Slide 1: Subtext</label>
                 <input type="text" id="edit-main-sub" value="I made a little space just for you. Use the arrow below to see it.">
+            </div>
+            <div class="input-group">
+                <label style="color: #ff758f; font-weight: bold;">🔑 Set Front Page Password</label>
+                <input type="text" id="edit-gate-pass" value="secret123" style="border: 2px solid #ff4d6d;">
             </div>
         </div>
 
@@ -297,6 +381,20 @@
         const leftArrow = document.getElementById('slideLeftBtn');
         const rightArrow = document.getElementById('slideRightBtn');
 
+        // Default visitor pass if localstorage is completely blank
+        let correctVisitorPass = "secret123";
+
+        function checkVisitorPassword() {
+            const entered = document.getElementById('visitor-pass-input').value;
+            if (entered === correctVisitorPass) {
+                const gate = document.getElementById('gatekeeper-screen');
+                gate.style.opacity = '0';
+                setTimeout(() => { gate.style.visibility = 'hidden'; }, 500);
+            } else {
+                alert("Incorrect Password! Hint: Ask the creator for access 😉");
+            }
+        }
+
         function slidePage(direction) {
             activePageIndex += direction;
             if(activePageIndex < 0) activePageIndex = 0;
@@ -312,7 +410,7 @@
         let wizardStep = 1;
 
         function openAdmin() {
-            let attempt = prompt("Enter Admin Password:");
+            let attempt = prompt("Enter Admin Dashboard Password:");
             if (attempt === "love") {
                 document.getElementById('adminPanel').style.display = 'block';
             } else if (attempt !== null) {
@@ -356,6 +454,9 @@
             localStorage.setItem('g_t1d', document.getElementById('edit-t1-desc').value);
             localStorage.setItem('g_l1', document.getElementById('edit-letter-1').value);
             localStorage.setItem('g_l2', document.getElementById('edit-letter-2').value);
+            
+            // Save the customized front-gate password
+            localStorage.setItem('g_gate_pass', document.getElementById('edit-gate-pass').value);
 
             storeMedia('edit-main-media', 'g_m0');
             storeMedia('edit-t1-media', 'g_m1');
@@ -384,6 +485,14 @@
                 document.getElementById('edit-letter-1').value = localStorage.getItem('g_l1');
                 document.getElementById('edit-letter-2').value = localStorage.getItem('g_l2');
             }
+            
+            if(localStorage.getItem('g_gate_pass')) {
+                correctVisitorPass = localStorage.getItem('g_gate_pass');
+                document.getElementById('edit-gate-pass').value = correctVisitorPass;
+            } else {
+                correctVisitorPass = document.getElementById('edit-gate-pass').value;
+            }
+
             updateLiveDOM();
             slidePage(0);
         }
@@ -400,6 +509,10 @@
             document.getElementById('view-letter-1').innerText = document.getElementById('edit-letter-1').value;
             document.getElementById('view-letter-2').innerText = document.getElementById('edit-letter-2').value;
             displayMediaContainer('g_m4', 'media-container-4');
+            
+            if(localStorage.getItem('g_gate_pass')) {
+                correctVisitorPass = localStorage.getItem('g_gate_pass');
+            }
         }
 
         function displayMediaContainer(storageKey, containerId) {
@@ -420,19 +533,16 @@
             }
         }
 
-        // --- CARTOON RUNNING BUTTON ENGINE ---
+        // --- CARTOON DASH SLIDING SYSTEM ---
         const noBtn = document.getElementById('no-btn');
         const yesBtn = document.getElementById('yes-btn');
         const questionBox = document.getElementById('question-box');
         const successScreen = document.getElementById('success-screen');
 
-        const escapeCartoonStyle = () => {
-            // Trigger the panic wobble animation effect
-            noBtn.classList.add('cartoon-panic');
-            setTimeout(() => { noBtn.classList.remove('cartoon-panic'); }, 200);
-
-            // Fly completely away to a random place on screen
-            const padding = 50;
+        const moveNoButtonSmoothly = () => {
+            noBtn.classList.add('cartoon-run-active');
+            
+            const padding = 60;
             const boundsWidth = window.innerWidth - noBtn.offsetWidth - padding * 2;
             const boundsHeight = window.innerHeight - noBtn.offsetHeight - padding * 2;
             
@@ -442,12 +552,14 @@
             noBtn.style.position = 'fixed'; 
             noBtn.style.left = `${randomX}px`; 
             noBtn.style.top = `${randomY}px`;
+
+            setTimeout(() => { noBtn.classList.remove('cartoon-run-active'); }, 400);
         };
 
-        noBtn.addEventListener('mouseover', escapeCartoonStyle);
+        noBtn.addEventListener('mouseover', moveNoButtonSmoothly);
         noBtn.addEventListener('touchstart', (e) => { 
             e.preventDefault(); 
-            escapeCartoonStyle(); 
+            moveNoButtonSmoothly(); 
         });
 
         yesBtn.addEventListener('click', () => {

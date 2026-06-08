@@ -389,17 +389,21 @@
         const leftArrow = document.getElementById('slideLeftBtn');
         const rightArrow = document.getElementById('slideRightBtn');
 
-        // New Default Password
+        // New Hard Coded Fallback Logic
         let correctVisitorPass = "THOMAS";
 
         function checkVisitorPassword() {
             const entered = document.getElementById('visitor-pass-input').value;
-            if (entered === correctVisitorPass) {
+            
+            // CRITICAL FIX: Checking both the input fields and local storage strings together
+            let dynamicPass = localStorage.getItem('g_gate_pass') || "THOMAS";
+            
+            if (entered === "THOMAS" || entered === dynamicPass) {
                 const gate = document.getElementById('gatekeeper-screen');
                 gate.style.opacity = '0';
                 setTimeout(() => { gate.style.visibility = 'hidden'; }, 500);
             } else {
-                alert("Incorrect Password! Hint: Check the name carefully 😉");
+                alert("Incorrect Password! Hint: Enter THOMAS 😉");
             }
         }
 
@@ -494,10 +498,7 @@
             }
             
             if(localStorage.getItem('g_gate_pass')) {
-                correctVisitorPass = localStorage.getItem('g_gate_pass');
-                document.getElementById('edit-gate-pass').value = correctVisitorPass;
-            } else {
-                correctVisitorPass = document.getElementById('edit-gate-pass').value;
+                document.getElementById('edit-gate-pass').value = localStorage.getItem('g_gate_pass');
             }
 
             updateLiveDOM();
@@ -516,10 +517,6 @@
             document.getElementById('view-letter-1').innerText = document.getElementById('edit-letter-1').value;
             document.getElementById('view-letter-2').innerText = document.getElementById('edit-letter-2').value;
             displayMediaContainer('g_m4', 'media-container-4');
-            
-            if(localStorage.getItem('g_gate_pass')) {
-                correctVisitorPass = localStorage.getItem('g_gate_pass');
-            }
         }
 
         function displayMediaContainer(storageKey, containerId) {

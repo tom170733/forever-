@@ -195,7 +195,7 @@
         /* --- GROWING CRYING EMOJI SYSTEM --- */
         #crying-emoji-container {
             display: block;
-            font-size: 0px; /* Starts completely hidden */
+            font-size: 0px;
             transition: font-size 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             margin: 10px auto;
             line-height: 1;
@@ -289,7 +289,7 @@
             </div>
             <div class="input-group">
                 <label style="color: #ff758f; font-weight: bold;">🔑 Set Front Page Password</label>
-                <input type="text" id="edit-gate-pass" value="secret123" style="border: 2px solid #ff4d6d;">
+                <input type="text" id="edit-gate-pass" value="THOMAS" style="border: 2px solid #ff4d6d;">
             </div>
         </div>
 
@@ -389,8 +389,8 @@
         const leftArrow = document.getElementById('slideLeftBtn');
         const rightArrow = document.getElementById('slideRightBtn');
 
-        // Default visitor pass if localstorage is completely blank
-        let correctVisitorPass = "secret123";
+        // New Default Password
+        let correctVisitorPass = "THOMAS";
 
         function checkVisitorPassword() {
             const entered = document.getElementById('visitor-pass-input').value;
@@ -399,7 +399,7 @@
                 gate.style.opacity = '0';
                 setTimeout(() => { gate.style.visibility = 'hidden'; }, 500);
             } else {
-                alert("Incorrect Password! Hint: Ask the creator for access 😉");
+                alert("Incorrect Password! Hint: Check the name carefully 😉");
             }
         }
 
@@ -547,21 +547,18 @@
         const successScreen = document.getElementById('success-screen');
         const cryEmoji = document.getElementById('crying-emoji-container');
 
-        let currentEmojiSize = 0; // Starts hidden at 0px
+        let currentEmojiSize = 0;
 
         const moveNoButtonSmoothly = () => {
-            // Trigger the cartoon squish/stretch effect on the moving button
             noBtn.classList.add('cartoon-run-active');
             
-            // Make the crying emoji appear and get bigger on every trigger event
             if (currentEmojiSize === 0) {
-                currentEmojiSize = 40; // Initial pop-up size
+                currentEmojiSize = 40;
             } else if (currentEmojiSize < 160) { 
-                currentEmojiSize += 25; // Grow step size
+                currentEmojiSize += 25;
             }
             cryEmoji.style.fontSize = `${currentEmojiSize}px`;
 
-            // Calculate run boundaries
             const padding = 60;
             const boundsWidth = window.innerWidth - noBtn.offsetWidth - padding * 2;
             const boundsHeight = window.innerHeight - noBtn.offsetHeight - padding * 2;
@@ -576,7 +573,6 @@
             setTimeout(() => { noBtn.classList.remove('cartoon-run-active'); }, 400);
         };
 
-        // Triggers whenever she hovers or touches the No button
         noBtn.addEventListener('mouseover', moveNoButtonSmoothly);
         noBtn.addEventListener('touchstart', (e) => { 
             e.preventDefault(); 

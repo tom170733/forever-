@@ -72,9 +72,7 @@
             outline: none;
             transition: border-color 0.2s;
         }
-        .gate-input:focus {
-            border-color: var(--primary-pink);
-        }
+        .gate-input:focus { border-color: var(--primary-pink); }
         .gate-btn {
             background: var(--primary-pink);
             color: white;
@@ -86,9 +84,7 @@
             box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
             transition: background 0.2s;
         }
-        .gate-btn:hover {
-            background: #ff3355;
-        }
+        .gate-btn:hover { background: #ff3355; }
 
         /* --- SECRET ADMIN TRIGGER (BOTTOM RIGHT) --- */
         #secret-trigger {
@@ -194,6 +190,16 @@
         }
         .cartoon-run-active {
             animation: cartoonScramble 0.3s linear infinite;
+        }
+
+        /* --- GROWING CRYING EMOJI SYSTEM --- */
+        #crying-emoji-container {
+            display: block;
+            font-size: 0px; /* Starts completely hidden */
+            transition: font-size 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin: 10px auto;
+            line-height: 1;
+            user-select: none;
         }
 
         .media-frame {
@@ -350,7 +356,9 @@
                         <p id="view-letter-1">I really like who I am when I am with you, and I want to see where this beautiful beginning takes us...</p>
                         <p id="view-letter-2" style="font-weight: 600;">So, I have a very important question to ask you...</p>
                         <div id="media-container-4"></div>
-                        <br>
+                        
+                        <div id="crying-emoji-container">😭</div>
+                        
                         <h2>Will you be my girlfriend? 🥺</h2>
                         <div class="btn-container">
                             <button class="proposal-btn" id="yes-btn">YES! ❤️</button>
@@ -455,7 +463,6 @@
             localStorage.setItem('g_l1', document.getElementById('edit-letter-1').value);
             localStorage.setItem('g_l2', document.getElementById('edit-letter-2').value);
             
-            // Save the customized front-gate password
             localStorage.setItem('g_gate_pass', document.getElementById('edit-gate-pass').value);
 
             storeMedia('edit-main-media', 'g_m0');
@@ -533,15 +540,28 @@
             }
         }
 
-        // --- CARTOON DASH SLIDING SYSTEM ---
+        // --- CARTOON RUNNING BUTTON & GROWING EMOJI SYSTEM ---
         const noBtn = document.getElementById('no-btn');
         const yesBtn = document.getElementById('yes-btn');
         const questionBox = document.getElementById('question-box');
         const successScreen = document.getElementById('success-screen');
+        const cryEmoji = document.getElementById('crying-emoji-container');
+
+        let currentEmojiSize = 0; // Starts hidden at 0px
 
         const moveNoButtonSmoothly = () => {
+            // Trigger the cartoon squish/stretch effect on the moving button
             noBtn.classList.add('cartoon-run-active');
             
+            // Make the crying emoji appear and get bigger on every trigger event
+            if (currentEmojiSize === 0) {
+                currentEmojiSize = 40; // Initial pop-up size
+            } else if (currentEmojiSize < 160) { 
+                currentEmojiSize += 25; // Grow step size
+            }
+            cryEmoji.style.fontSize = `${currentEmojiSize}px`;
+
+            // Calculate run boundaries
             const padding = 60;
             const boundsWidth = window.innerWidth - noBtn.offsetWidth - padding * 2;
             const boundsHeight = window.innerHeight - noBtn.offsetHeight - padding * 2;
@@ -556,6 +576,7 @@
             setTimeout(() => { noBtn.classList.remove('cartoon-run-active'); }, 400);
         };
 
+        // Triggers whenever she hovers or touches the No button
         noBtn.addEventListener('mouseover', moveNoButtonSmoothly);
         noBtn.addEventListener('touchstart', (e) => { 
             e.preventDefault(); 

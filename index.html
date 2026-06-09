@@ -289,7 +289,7 @@
             </div>
             <div class="input-group">
                 <label style="color: #ff758f; font-weight: bold;">🔑 Set Front Page Password</label>
-                <input type="text" id="edit-gate-pass" value="THOMAS" style="border: 2px solid #ff4d6d;">
+                <input type="text" id="edit-gate-pass" value="AMIRA" style="border: 2px solid #ff4d6d;">
             </div>
         </div>
 
@@ -389,21 +389,19 @@
         const leftArrow = document.getElementById('slideLeftBtn');
         const rightArrow = document.getElementById('slideRightBtn');
 
-        // New Hard Coded Fallback Logic
-        let correctVisitorPass = "THOMAS";
-
         function checkVisitorPassword() {
             const entered = document.getElementById('visitor-pass-input').value;
             
-            // CRITICAL FIX: Checking both the input fields and local storage strings together
-            let dynamicPass = localStorage.getItem('g_gate_pass') || "THOMAS";
+            // Gets the active dashboard value directly, falls back to AMIRA
+            let currentLivePass = localStorage.getItem('g_gate_pass') || "AMIRA";
             
-            if (entered === "THOMAS" || entered === dynamicPass) {
+            // Closes gate if it matches the code default OR whatever you customized it to
+            if (entered === "AMIRA" || entered === currentLivePass) {
                 const gate = document.getElementById('gatekeeper-screen');
                 gate.style.opacity = '0';
                 setTimeout(() => { gate.style.visibility = 'hidden'; }, 500);
             } else {
-                alert("Incorrect Password! Hint: Enter THOMAS 😉");
+                alert("Incorrect Password!"); // Hint totally hidden now
             }
         }
 

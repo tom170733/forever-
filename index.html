@@ -109,13 +109,27 @@
             overflow-y: auto;
         }
 
-        /* --- IMAGE SPECIFIC INTERACTIVE CARD --- */
+        /* --- IMAGE SPECIFIC INTERACTIVE PROPOSAL CARD --- */
         .proposal-card {
             background: #ffffff !important;
             border-radius: 30px !important;
-            padding: 30px 20px !important;
+            padding: 35px 25px !important;
             box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important;
-            max-width: 420px !important;
+            max-width: 440px !important;
+        }
+
+        /* --- SWEET WORDS THINKING SPACE --- */
+        .sweet-reflection-text {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #4a4e69;
+            margin-bottom: 20px;
+            font-style: italic;
+            background: #fff0f3;
+            padding: 18px;
+            border-radius: 16px;
+            border-left: 4px solid var(--primary-pink);
+            text-align: left;
         }
 
         .proposal-card .main-question {
@@ -124,7 +138,7 @@
             color: #2b2d42;
             font-weight: 700;
             line-height: 1.2;
-            margin: 20px 0;
+            margin: 20px 0 15px 0;
             font-style: italic;
         }
 
@@ -152,12 +166,12 @@
 
         /* --- LOUD CRYING EMOJI ARCHITECTURE --- */
         #emoji-graphic-wrapper {
-            display: none; /* Initially hidden until "No" is touched */
+            display: none; 
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            margin: 0 auto;
+            margin: 0 auto 10px auto;
         }
         .visual-emoji-graphic {
-            width: 150px;
+            width: 130px;
             height: auto;
             margin: 0 auto;
             display: block;
@@ -202,27 +216,38 @@
         .arrow:hover { background: var(--primary-pink); color: white; }
         .arrow:disabled { opacity: 0.2; cursor: not-allowed; border-color: #ccc; color: #ccc; }
 
-        /* --- PROPOSAL SYSTEM --- */
-        .btn-container { display: flex; gap: 20px; justify-content: center; align-items: center; margin-top: 15px; min-height: 80px; position: relative; width: 100%;}
-        .proposal-btn { padding: 12px 35px; font-size: 1.1rem; font-weight: 700; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
-        #yes-btn { background-color: var(--primary-pink); color: white; transition: transform 0.2s; z-index: 10; letter-spacing: 1px;}
+        /* --- BUTTON LAYOUT FRAMEWORK --- */
+        .btn-container { 
+            display: flex; 
+            gap: 25px; 
+            justify-content: center; 
+            align-items: center; 
+            margin-top: 20px; 
+            min-height: 80px; 
+            position: relative; 
+            width: 100%;
+        }
+        
+        .proposal-btn { padding: 12px 38px; font-size: 1.15rem; font-weight: 700; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
+        #yes-btn { background-color: var(--primary-pink); color: white; transition: transform 0.2s; z-index: 10; letter-spacing: 0.5px;}
         #yes-btn:hover { transform: scale(1.1); background-color: #ff3355; }
         
+        /* The No button is fully stable and stylized, it just runs away instantly without disappearing */
         #no-btn { 
             background-color: #f72585; 
             color: white; 
             position: relative; 
             z-index: 1000;
-            padding: 10px 25px;
-            font-size: 1rem;
+            padding: 10px 28px;
+            font-size: 1.05rem;
             border-radius: 12px;
             box-shadow: -5px 5px 0px #000;
             border: 2px solid #000;
-            transition: left 0.4s cubic-bezier(0.19, 1, 0.22, 1), top 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: left 0.3s cubic-bezier(0.19, 1, 0.22, 1), top 0.3s cubic-bezier(0.19, 1, 0.22, 1);
         }
         .hidden { display: none !important; }
 
-        /* --- SUCCESS LOVE CARD --- */
+        /* --- SUCCESS RESPONSE LAYOUT --- */
         .love-success-card {
             background: #ffffff;
             border-radius: 30px;
@@ -241,23 +266,21 @@
             font-size: 1.2rem;
             color: #4a4e69;
             line-height: 1.7;
-            font-weight: 400;
         }
 
-        /* --- FLOATING HEART ENGINE --- */
+        /* --- FLOATING EMOTICON ENGINE --- */
         .floating-heart {
             position: fixed;
             bottom: -50px;
-            color: #ff4d6d;
-            font-size: 2rem;
+            font-size: 2.2rem;
             user-select: none;
             pointer-events: none;
             z-index: 9999;
-            animation: floatUp 4s linear forwards;
+            animation: floatUp 3.5s linear forwards;
         }
         @keyframes floatUp {
-            0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 1; }
-            100% { transform: translateY(-105vh) translateX(var(--random-x, 50px)) scale(1.3); opacity: 0; }
+            0% { transform: translateY(0) translateX(0) scale(0.6); opacity: 1; }
+            100% { transform: translateY(-105vh) translateX(var(--random-x, 40px)) scale(1.4); opacity: 0; }
         }
     </style>
 </head>
@@ -300,12 +323,12 @@
 
         <div class="wizard-step" id="step-3">
             <div class="input-group">
-                <label>Slide 3: Interactive Question Text</label>
-                <input type="text" id="edit-proposal-text" value="Will you be my girlfriend?">
+                <label>Slide 3: Sweet Thought Words</label>
+                <textarea id="edit-sweet-word" rows="2">From the moment we started talking, you've brought so much light into my life. Every smile, every laugh, and every simple conversation with you has become the absolute best part of my day. I really love who I am when I'm around you...</textarea>
             </div>
             <div class="input-group">
-                <label>Slide 3: Optional Media File (Replaces Emoji if Uploaded)</label>
-                <input type="file" id="edit-letter-media" accept="image/*,video/*">
+                <label>Slide 3: Interactive Question Text</label>
+                <input type="text" id="edit-proposal-text" value="Will you be my girlfriend?">
             </div>
         </div>
 
@@ -343,7 +366,10 @@
                         <div id="emoji-graphic-wrapper">
                             <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f62d/512.webp" alt="😭" class="visual-emoji-graphic">
                         </div>
-                        <div id="media-container-4"></div>
+                        
+                        <div class="sweet-reflection-text" id="view-sweet-word">
+                            From the moment we started talking, you've brought so much light into my life. Every smile, every laugh, and every simple conversation with you has become the absolute best part of my day. I really love who I am when I'm around you...
+                        </div>
                         
                         <div class="main-question" id="view-proposal-text">Will you be my girlfriend?</div>
                         
@@ -435,11 +461,11 @@
             localStorage.setItem('g_sub', document.getElementById('edit-main-sub').value);
             localStorage.setItem('g_t1t', document.getElementById('edit-t1-title').value);
             localStorage.setItem('g_t1d', document.getElementById('edit-t1-desc').value);
+            localStorage.setItem('g_sweet_wrd', document.getElementById('edit-sweet-word').value);
             localStorage.setItem('g_prop_txt', document.getElementById('edit-proposal-text').value);
             
             storeMedia('edit-main-media', 'g_m0');
             storeMedia('edit-t1-media', 'g_m1');
-            storeMedia('edit-letter-media', 'g_m4');
         }
 
         function storeMedia(inputId, storageKey) {
@@ -461,6 +487,7 @@
                 document.getElementById('edit-main-sub').value = localStorage.getItem('g_sub');
                 document.getElementById('edit-t1-title').value = localStorage.getItem('g_t1t');
                 document.getElementById('edit-t1-desc').value = localStorage.getItem('g_t1d');
+                document.getElementById('edit-sweet-word').value = localStorage.getItem('g_sweet_wrd');
                 document.getElementById('edit-proposal-text').value = localStorage.getItem('g_prop_txt');
             }
 
@@ -477,20 +504,17 @@
             document.getElementById('view-t1-desc').innerText = document.getElementById('edit-t1-desc').value;
             displayMediaContainer('g_m1', 'media-container-1');
             
+            document.getElementById('view-sweet-word').innerText = document.getElementById('edit-sweet-word').value;
             document.getElementById('view-proposal-text').innerText = document.getElementById('edit-proposal-text').value;
-            displayMediaContainer('g_m4', 'media-container-4');
         }
 
         function displayMediaContainer(storageKey, containerId) {
             const dataStr = localStorage.getItem(storageKey);
             const mimeType = localStorage.getItem(storageKey + '_rawType');
             const targetNode = document.getElementById(containerId);
-            const emojiWrapper = document.getElementById('emoji-graphic-wrapper');
 
             if (dataStr && mimeType && targetNode) {
                 targetNode.innerHTML = '';
-                if(emojiWrapper && containerId === 'media-container-4') emojiWrapper.style.removeProperty('display');
-                
                 if(mimeType.startsWith('video/')) {
                     const video = document.createElement('video');
                     video.src = dataStr; video.className = 'media-frame'; video.controls = true; video.loop = true; video.muted = true; video.autoplay = true;
@@ -513,21 +537,22 @@
 
         let scalarFactor = 0.6; 
 
+        // Smoothly runs to another space without vanishing
         const moveNoButtonSmoothly = () => {
             noBtn.classList.add('cartoon-run-active');
             
-            // 1. Reveal crying emoji ONLY when she hits/moves toward No
+            // Bring up crying emoji to tease her
             if (emojiWrapper.style.display !== 'block') {
                 emojiWrapper.style.display = 'block';
             }
             
-            // 2. Incrementally expand the size of the emoji graphic smoothly
-            if (scalarFactor < 2.0) { 
-                scalarFactor += 0.2;
+            // Grow crying emoji graphic sizes
+            if (scalarFactor < 1.9) { 
+                scalarFactor += 0.15;
                 emojiWrapper.style.transform = `scale(${scalarFactor})`;
             }
 
-            const padding = 70;
+            const padding = 75;
             const boundsWidth = window.innerWidth - noBtn.offsetWidth - padding * 2;
             const boundsHeight = window.innerHeight - noBtn.offsetHeight - padding * 2;
             
@@ -547,33 +572,33 @@
             moveNoButtonSmoothly(); 
         });
 
-        // --- EXPLOSIVE HEART BURST GENERATOR ---
+        // --- SWEET LOVE FLOATING EMOTICON SPAWNER ---
         function createFloatingHeart() {
-            const heartIcons = ['❤️', '💖', '💕', '💘', '🌸', '😍'];
+            const heartIcons = ['❤️', '💖', '💕', '💘', '😍', '💋', '💝', '🌸', '💖'];
             const heart = document.createElement('div');
             heart.className = 'floating-heart';
             heart.innerText = heartIcons[Math.floor(Math.random() * heartIcons.length)];
             
             heart.style.left = Math.random() * 100 + 'vw';
             heart.style.setProperty('--random-x', (Math.random() * 200 - 100) + 'px');
-            heart.style.animationDuration = (Math.random() * 2 + 2) + 's'; 
+            heart.style.animationDuration = (Math.random() * 2 + 1.5) + 's'; 
             
             document.body.appendChild(heart);
-            setTimeout(() => { heart.remove(); }, 4000);
+            setTimeout(() => { heart.remove(); }, 3500);
         }
 
         yesBtn.addEventListener('click', () => {
             questionBox.classList.add('hidden');
             successScreen.classList.remove('hidden');
             
-            // Remove full-screen arrows to keep her inside the success frame
+            // Hide standard slides navigations
             document.querySelector('.nav-arrows').style.display = 'none';
             if(cardFrame) cardFrame.style.maxWidth = "550px";
 
-            // Trigger thousands of interactive hearts cascading across viewport
-            const heartInterval = setInterval(createFloatingHeart, 60);
+            // Loop tons of gorgeous floating hearts upwards
+            const heartInterval = setInterval(createFloatingHeart, 50);
 
-            // Confetti explosion framework
+            // Colorful premium confetti spray parameters
             const length = 12 * 1000;
             const endAnim = Date.now() + length;
             const confDefaults = { startVelocity: 35, spread: 360, ticks: 70, zIndex: 10001 };
@@ -586,7 +611,7 @@
                   clearInterval(heartInterval);
                   return;
               }
-              const count = 60 * (remaining / length);
+              const count = 65 * (remaining / length);
               confetti({ ...confDefaults, count, origin: { x: scopeRange(0.1, 0.4), y: Math.random() - 0.2 } });
               confetti({ ...confDefaults, count, origin: { x: scopeRange(0.6, 0.9), y: Math.random() - 0.2 } });
             }, 250);

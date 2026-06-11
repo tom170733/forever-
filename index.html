@@ -256,7 +256,6 @@
                 <label style="color: #64dfdf;">📱 Your WhatsApp Number</label>
                 <input type="text" id="edit-phone-number" value="" placeholder="Include country code, e.g. 23277000000">
             </div>
-            <!-- Dynamic Link Engine Button for Friends -->
             <div class="input-group" style="justify-content: flex-end; margin-top: 15px;">
                 <button type="button" class="admin-btn" style="background: #2ec4b6; color: white;" onclick="generateShareableLink()">🔗 Generate Shareable Link</button>
             </div>
@@ -296,9 +295,7 @@
                             <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f62d/512.webp" alt="😭" class="visual-emoji-graphic">
                         </div>
                         
-                        <div class="sweet-reflection-text" id="view-sweet-word">
-                            Every single conversation we have leaves me smiling at my phone like an idiot. You have this beautiful way of making my darkest days feel incredibly bright. I've realized that my favorite place to be is wherever you are, and I don't want to miss out on a single second of a future with you...
-                        </div>
+                        <div class="sweet-reflection-text" id="view-sweet-word">Every single conversation we have leaves me smiling at my phone like an idiot. You have this beautiful way of making my darkest days feel incredibly bright. I've realized that my favorite place to be is wherever you are, and I don't want to miss out on a single second of a future with you...</div>
                         
                         <div class="main-question" id="view-proposal-text">Will you be my girlfriend?</div>
                         
@@ -409,7 +406,7 @@
             }
         }
 
-        // READS URL PARAMETERS SO FRIENDS CAN SHARE DYNAMICALLY
+        // IMPROVED: Hardcoded ultimate fallbacks if storage/link variables are empty
         function loadSavedData() {
             const urlParams = new URLSearchParams(window.location.search);
             
@@ -417,17 +414,17 @@
                 document.getElementById('edit-main-title').value = urlParams.get('t0') || "Hey Beautiful...";
                 document.getElementById('edit-main-sub').value = urlParams.get('s0') || "I made a little space just for you.";
                 document.getElementById('edit-t1-title').value = urlParams.get('t1') || "Since We Met...";
-                document.getElementById('edit-t1-desc').value = urlParams.get('d1') || "";
-                document.getElementById('edit-sweet-word').value = urlParams.get('sw') || "";
+                document.getElementById('edit-t1-desc').value = urlParams.get('d1') || "Even though we just recently met, meeting you has been the absolute best part of my days...";
+                document.getElementById('edit-sweet-word').value = urlParams.get('sw') || "Every single conversation we have leaves me smiling at my phone like an idiot...";
                 document.getElementById('edit-proposal-text').value = urlParams.get('pq') || "Will you be my girlfriend?";
                 document.getElementById('edit-phone-number').value = urlParams.get('ph') || "";
             } else if(localStorage.getItem('g_title')) {
-                document.getElementById('edit-main-title').value = localStorage.getItem('g_title');
-                document.getElementById('edit-main-sub').value = localStorage.getItem('g_sub');
-                document.getElementById('edit-t1-title').value = localStorage.getItem('g_t1t');
-                document.getElementById('edit-t1-desc').value = localStorage.getItem('g_t1d');
-                document.getElementById('edit-sweet-word').value = localStorage.getItem('g_sweet_wrd');
-                document.getElementById('edit-proposal-text').value = localStorage.getItem('g_prop_txt');
+                document.getElementById('edit-main-title').value = localStorage.getItem('g_title') || "Hey Beautiful...";
+                document.getElementById('edit-main-sub').value = localStorage.getItem('g_sub') || "I made a little space just for you.";
+                document.getElementById('edit-t1-title').value = localStorage.getItem('g_t1t') || "Since We Met...";
+                document.getElementById('edit-t1-desc').value = localStorage.getItem('g_t1d') || "Even though we just recently met, meeting you has been the absolute best part of my days...";
+                document.getElementById('edit-sweet-word').value = localStorage.getItem('g_sweet_wrd') || "Every single conversation we have leaves me smiling at my phone like an idiot...";
+                document.getElementById('edit-proposal-text').value = localStorage.getItem('g_prop_txt') || "Will you be my girlfriend?";
                 document.getElementById('edit-phone-number').value = localStorage.getItem('g_phone_num') || "";
             }
 
@@ -447,7 +444,6 @@
 
             const generatedUrl = `${baseUrl}?t0=${t0}&s0=${s0}&t1=${t1}&d1=${d1}&sw=${sw}&pq=${pq}&ph=${ph}`;
             
-            // Copies to clipboard instantly
             navigator.clipboard.writeText(generatedUrl).then(() => {
                 alert("✨ Premium Link Copied to Clipboard! Send this directly to her WhatsApp.");
             }).catch(() => {
@@ -456,16 +452,16 @@
         }
 
         function updateLiveDOM() {
-            document.getElementById('view-main-title').innerText = document.getElementById('edit-main-title').value;
-            document.getElementById('view-main-sub').innerText = document.getElementById('edit-main-sub').value;
+            document.getElementById('view-main-title').innerText = document.getElementById('edit-main-title').value || "Hey Beautiful...";
+            document.getElementById('view-main-sub').innerText = document.getElementById('edit-main-sub').value || "I made a little space just for you.";
             displayMediaContainer('g_m0', 'media-container-0');
             
-            document.getElementById('view-t1-title').innerText = document.getElementById('edit-t1-title').value;
-            document.getElementById('view-t1-desc').innerText = document.getElementById('edit-t1-desc').value;
+            document.getElementById('view-t1-title').innerText = document.getElementById('edit-t1-title').value || "Since We Met...";
+            document.getElementById('view-t1-desc').innerText = document.getElementById('edit-t1-desc').value || "Even though we just recently met, meeting you has been the absolute best part of my days...";
             displayMediaContainer('g_m1', 'media-container-1');
             
-            document.getElementById('view-sweet-word').innerText = document.getElementById('edit-sweet-word').value;
-            document.getElementById('view-proposal-text').innerText = document.getElementById('edit-proposal-text').value;
+            document.getElementById('view-sweet-word').innerText = document.getElementById('edit-sweet-word').value || "Every single conversation we have leaves me smiling at my phone like an idiot...";
+            document.getElementById('view-proposal-text').innerText = document.getElementById('edit-proposal-text').value || "Will you be my girlfriend?";
         }
 
         function displayMediaContainer(storageKey, containerId) {

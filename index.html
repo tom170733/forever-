@@ -109,27 +109,36 @@
             overflow-y: auto;
         }
 
-        /* --- IMAGE SPECIFIC INTERACTIVE PROPOSAL CARD --- */
+        /* --- PROPOSAL CARD --- */
         .proposal-card {
             background: #ffffff !important;
             border-radius: 30px !important;
             padding: 35px 25px !important;
             box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important;
-            max-width: 440px !important;
+            max-width: 460px !important;
         }
 
-        /* --- SWEET WORDS THINKING SPACE --- */
         .sweet-reflection-text {
-            font-size: 1.05rem;
-            line-height: 1.6;
+            font-size: 1.08rem;
+            line-height: 1.7;
             color: #4a4e69;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             font-style: italic;
-            background: #fff0f3;
-            padding: 18px;
-            border-radius: 16px;
-            border-left: 4px solid var(--primary-pink);
+            background: linear-gradient(145deg, #fff0f3, #ffe5ec);
+            padding: 22px;
+            border-radius: 20px;
+            border-left: 5px solid var(--primary-pink);
             text-align: left;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(255,77,109,0.05);
+        }
+        .sweet-reflection-text::after {
+            content: "💖";
+            position: absolute;
+            bottom: 8px;
+            right: 12px;
+            font-size: 1.2rem;
+            opacity: 0.35;
         }
 
         .proposal-card .main-question {
@@ -152,7 +161,6 @@
             50% { transform: scale(1.03); }
         }
 
-        /* --- CARTOON SCRAMBLE RUNNING STYLE --- */
         @keyframes cartoonScramble {
             0% { transform: scale(1) skewX(0deg); }
             25% { transform: scale(0.9, 1.1) skewX(-15deg); }
@@ -160,124 +168,38 @@
             75% { transform: scale(0.95, 1.05) skewX(-5deg); }
             100% { transform: scale(1) skewX(0deg); }
         }
-        .cartoon-run-active {
-            animation: cartoonScramble 0.3s linear infinite;
-        }
+        .cartoon-run-active { animation: cartoonScramble 0.3s linear infinite; }
 
-        /* --- LOUD CRYING EMOJI ARCHITECTURE --- */
         #emoji-graphic-wrapper {
             display: none; 
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             margin: 0 auto 10px auto;
         }
-        .visual-emoji-graphic {
-            width: 130px;
-            height: auto;
-            margin: 0 auto;
-            display: block;
-            user-select: none;
-        }
+        .visual-emoji-graphic { width: 130px; height: auto; margin: 0 auto; display: block; user-select: none; }
 
-        .media-frame {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 16px;
-            margin-top: 15px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-        }
+        .media-frame { width: 100%; height: 250px; object-fit: cover; border-radius: 16px; margin-top: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
 
-        /* --- SLIDE NAV BUTTONS --- */
-        .nav-arrows {
-            position: fixed;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 100px;
-            z-index: 99;
-        }
-        .arrow {
-            background: white;
-            color: var(--primary-pink);
-            border: 2px solid var(--primary-pink);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            transition: all 0.2s;
-        }
+        .nav-arrows { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; gap: 100px; z-index: 99; }
+        .arrow { background: white; color: var(--primary-pink); border: 2px solid var(--primary-pink); width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: all 0.2s; }
         .arrow:hover { background: var(--primary-pink); color: white; }
         .arrow:disabled { opacity: 0.2; cursor: not-allowed; border-color: #ccc; color: #ccc; }
 
-        /* --- BUTTON LAYOUT FRAMEWORK --- */
-        .btn-container { 
-            display: flex; 
-            gap: 25px; 
-            justify-content: center; 
-            align-items: center; 
-            margin-top: 20px; 
-            min-height: 80px; 
-            position: relative; 
-            width: 100%;
-        }
-        
+        .btn-container { display: flex; gap: 25px; justify-content: center; align-items: center; margin-top: 20px; min-height: 80px; position: relative; width: 100%; }
         .proposal-btn { padding: 12px 38px; font-size: 1.15rem; font-weight: 700; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
         #yes-btn { background-color: var(--primary-pink); color: white; transition: transform 0.2s; z-index: 10; letter-spacing: 0.5px;}
         #yes-btn:hover { transform: scale(1.1); background-color: #ff3355; }
         
-        /* The No button is fully stable and stylized, it just runs away instantly without disappearing */
         #no-btn { 
-            background-color: #f72585; 
-            color: white; 
-            position: relative; 
-            z-index: 1000;
-            padding: 10px 28px;
-            font-size: 1.05rem;
-            border-radius: 12px;
-            box-shadow: -5px 5px 0px #000;
-            border: 2px solid #000;
+            background-color: #f72585; color: white; position: relative; z-index: 1000; padding: 10px 28px; font-size: 1.05rem; border-radius: 12px; box-shadow: -5px 5px 0px #000; border: 2px solid #000;
             transition: left 0.3s cubic-bezier(0.19, 1, 0.22, 1), top 0.3s cubic-bezier(0.19, 1, 0.22, 1);
         }
         .hidden { display: none !important; }
 
-        /* --- SUCCESS RESPONSE LAYOUT --- */
-        .love-success-card {
-            background: #ffffff;
-            border-radius: 30px;
-            padding: 40px 30px;
-            text-align: center;
-            box-shadow: 0 20px 50px rgba(255, 77, 109, 0.25);
-        }
-        .love-success-card h2 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 3.5rem;
-            color: var(--primary-pink);
-            margin-bottom: 15px;
-            line-height: 1.2;
-        }
-        .love-success-card p {
-            font-size: 1.2rem;
-            color: #4a4e69;
-            line-height: 1.7;
-        }
+        .love-success-card { background: #ffffff; border-radius: 30px; padding: 40px 30px; text-align: center; box-shadow: 0 20px 50px rgba(255, 77, 109, 0.25); }
+        .love-success-card h2 { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: var(--primary-pink); margin-bottom: 15px; line-height: 1.2; }
+        .love-success-card p { font-size: 1.2rem; color: #4a4e69; line-height: 1.7; }
 
-        /* --- FLOATING EMOTICON ENGINE --- */
-        .floating-heart {
-            position: fixed;
-            bottom: -50px;
-            font-size: 2.2rem;
-            user-select: none;
-            pointer-events: none;
-            z-index: 9999;
-            animation: floatUp 3.5s linear forwards;
-        }
+        .floating-heart { position: fixed; bottom: -50px; font-size: 2.2rem; user-select: none; pointer-events: none; z-index: 9999; animation: floatUp 3.5s linear forwards; }
         @keyframes floatUp {
             0% { transform: translateY(0) translateX(0) scale(0.6); opacity: 1; }
             100% { transform: translateY(-105vh) translateX(var(--random-x, 40px)) scale(1.4); opacity: 0; }
@@ -324,11 +246,19 @@
         <div class="wizard-step" id="step-3">
             <div class="input-group">
                 <label>Slide 3: Sweet Thought Words</label>
-                <textarea id="edit-sweet-word" rows="5">Every day I spend talking to you becomes my favorite part of the day. Your smile brightens my world, your kindness touches my heart, and being around you makes everything feel better. You are truly special to me, and I feel incredibly lucky to have met you. No matter how busy or difficult my day is, hearing from you always makes everything better. There is something I've been wanting to ask you from the bottom of my heart...</textarea>
+                <textarea id="edit-sweet-word" rows="2">Every single conversation we have leaves me smiling at my phone like an idiot. You have this beautiful way of making my darkest days feel incredibly bright. I've realized that my favorite place to be is wherever you are, and I don't want to miss out on a single second of a future with you...</textarea>
             </div>
             <div class="input-group">
                 <label>Slide 3: Interactive Question Text</label>
                 <input type="text" id="edit-proposal-text" value="Will you be my girlfriend?">
+            </div>
+            <div class="input-group">
+                <label style="color: #64dfdf;">📱 Your WhatsApp Number</label>
+                <input type="text" id="edit-phone-number" value="" placeholder="Include country code, e.g. 23277000000">
+            </div>
+            <!-- Dynamic Link Engine Button for Friends -->
+            <div class="input-group" style="justify-content: flex-end; margin-top: 15px;">
+                <button type="button" class="admin-btn" style="background: #2ec4b6; color: white;" onclick="generateShareableLink()">🔗 Generate Shareable Link</button>
             </div>
         </div>
 
@@ -338,7 +268,6 @@
             <button class="admin-btn btn-next" id="nextBtn" onclick="changeStep(1)">Next Step</button>
         </div>
     </div>
-
 
     <div class="swiper-container">
         <div class="swiper-wrapper" id="mainSwiper">
@@ -368,10 +297,10 @@
                         </div>
                         
                         <div class="sweet-reflection-text" id="view-sweet-word">
-    Every day I spend talking to you becomes my favorite part of the day. Your smile brightens my world, your kindness touches my heart, and being around you makes everything feel better. You are truly special to me, and I feel incredibly lucky to have met you. No matter how busy or difficult my day is, hearing from you always makes everything better. There is something I've been wanting to ask you from the bottom of my heart...
-                      </div>
+                            Every single conversation we have leaves me smiling at my phone like an idiot. You have this beautiful way of making my darkest days feel incredibly bright. I've realized that my favorite place to be is wherever you are, and I don't want to miss out on a single second of a future with you...
+                        </div>
                         
-                       <input type="text" id="edit-proposal-text" value="Will you make me the happiest person and be my girlfriend? ❤️">
+                        <div class="main-question" id="view-proposal-text">Will you be my girlfriend?</div>
                         
                         <div class="btn-container">
                             <button class="proposal-btn" id="yes-btn">YES! ❤️</button>
@@ -415,7 +344,6 @@
             rightArrow.disabled = (activePageIndex === 2);
         }
 
-        // --- DASHBOARD CONTROLS ---
         let wizardStep = 1;
 
         function openAdmin() {
@@ -455,7 +383,6 @@
             updateLiveDOM();
         }
 
-        // --- PERSISTENT STORAGE ENGINE ---
         function saveData() {
             localStorage.setItem('g_title', document.getElementById('edit-main-title').value);
             localStorage.setItem('g_sub', document.getElementById('edit-main-sub').value);
@@ -463,6 +390,7 @@
             localStorage.setItem('g_t1d', document.getElementById('edit-t1-desc').value);
             localStorage.setItem('g_sweet_wrd', document.getElementById('edit-sweet-word').value);
             localStorage.setItem('g_prop_txt', document.getElementById('edit-proposal-text').value);
+            localStorage.setItem('g_phone_num', document.getElementById('edit-phone-number').value);
             
             storeMedia('edit-main-media', 'g_m0');
             storeMedia('edit-t1-media', 'g_m1');
@@ -481,18 +409,50 @@
             }
         }
 
+        // READS URL PARAMETERS SO FRIENDS CAN SHARE DYNAMICALLY
         function loadSavedData() {
-            if(localStorage.getItem('g_title')) {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if(urlParams.has('sw')) {
+                document.getElementById('edit-main-title').value = urlParams.get('t0') || "Hey Beautiful...";
+                document.getElementById('edit-main-sub').value = urlParams.get('s0') || "I made a little space just for you.";
+                document.getElementById('edit-t1-title').value = urlParams.get('t1') || "Since We Met...";
+                document.getElementById('edit-t1-desc').value = urlParams.get('d1') || "";
+                document.getElementById('edit-sweet-word').value = urlParams.get('sw') || "";
+                document.getElementById('edit-proposal-text').value = urlParams.get('pq') || "Will you be my girlfriend?";
+                document.getElementById('edit-phone-number').value = urlParams.get('ph') || "";
+            } else if(localStorage.getItem('g_title')) {
                 document.getElementById('edit-main-title').value = localStorage.getItem('g_title');
                 document.getElementById('edit-main-sub').value = localStorage.getItem('g_sub');
                 document.getElementById('edit-t1-title').value = localStorage.getItem('g_t1t');
                 document.getElementById('edit-t1-desc').value = localStorage.getItem('g_t1d');
                 document.getElementById('edit-sweet-word').value = localStorage.getItem('g_sweet_wrd');
                 document.getElementById('edit-proposal-text').value = localStorage.getItem('g_prop_txt');
+                document.getElementById('edit-phone-number').value = localStorage.getItem('g_phone_num') || "";
             }
 
             updateLiveDOM();
             slidePage(0);
+        }
+
+        function generateShareableLink() {
+            const baseUrl = window.location.href.split('?')[0];
+            const t0 = encodeURIComponent(document.getElementById('edit-main-title').value);
+            const s0 = encodeURIComponent(document.getElementById('edit-main-sub').value);
+            const t1 = encodeURIComponent(document.getElementById('edit-t1-title').value);
+            const d1 = encodeURIComponent(document.getElementById('edit-t1-desc').value);
+            const sw = encodeURIComponent(document.getElementById('edit-sweet-word').value);
+            const pq = encodeURIComponent(document.getElementById('edit-proposal-text').value);
+            const ph = encodeURIComponent(document.getElementById('edit-phone-number').value);
+
+            const generatedUrl = `${baseUrl}?t0=${t0}&s0=${s0}&t1=${t1}&d1=${d1}&sw=${sw}&pq=${pq}&ph=${ph}`;
+            
+            // Copies to clipboard instantly
+            navigator.clipboard.writeText(generatedUrl).then(() => {
+                alert("✨ Premium Link Copied to Clipboard! Send this directly to her WhatsApp.");
+            }).catch(() => {
+                prompt("Copy this complete link manually:", generatedUrl);
+            });
         }
 
         function updateLiveDOM() {
@@ -527,7 +487,6 @@
             }
         }
 
-        // --- INTERACTIVE SMART EMOTION ENGINE ---
         const noBtn = document.getElementById('no-btn');
         const yesBtn = document.getElementById('yes-btn');
         const questionBox = document.getElementById('question-box');
@@ -537,52 +496,32 @@
 
         let scalarFactor = 0.6; 
 
-        // Smoothly runs to another space without vanishing
         const moveNoButtonSmoothly = () => {
             noBtn.classList.add('cartoon-run-active');
-            
-            // Bring up crying emoji to tease her
-            if (emojiWrapper.style.display !== 'block') {
-                emojiWrapper.style.display = 'block';
-            }
-            
-            // Grow crying emoji graphic sizes
-            if (scalarFactor < 1.9) { 
-                scalarFactor += 0.15;
-                emojiWrapper.style.transform = `scale(${scalarFactor})`;
-            }
+            if (emojiWrapper.style.display !== 'block') { emojiWrapper.style.display = 'block'; }
+            if (scalarFactor < 1.9) { scalarFactor += 0.15; emojiWrapper.style.transform = `scale(${scalarFactor})`; }
 
             const padding = 75;
             const boundsWidth = window.innerWidth - noBtn.offsetWidth - padding * 2;
             const boundsHeight = window.innerHeight - noBtn.offsetHeight - padding * 2;
-            
             const randomX = Math.floor(Math.random() * boundsWidth) + padding;
             const randomY = Math.floor(Math.random() * boundsHeight) + padding;
 
-            noBtn.style.position = 'fixed'; 
-            noBtn.style.left = `${randomX}px`; 
-            noBtn.style.top = `${randomY}px`;
-
+            noBtn.style.position = 'fixed'; noBtn.style.left = `${randomX}px`; noBtn.style.top = `${randomY}px`;
             setTimeout(() => { noBtn.classList.remove('cartoon-run-active'); }, 400);
         };
 
         noBtn.addEventListener('mouseover', moveNoButtonSmoothly);
-        noBtn.addEventListener('touchstart', (e) => { 
-            e.preventDefault(); 
-            moveNoButtonSmoothly(); 
-        });
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNoButtonSmoothly(); });
 
-        // --- SWEET LOVE FLOATING EMOTICON SPAWNER ---
         function createFloatingHeart() {
             const heartIcons = ['❤️', '💖', '💕', '💘', '😍', '💋', '💝', '🌸', '💖'];
             const heart = document.createElement('div');
             heart.className = 'floating-heart';
             heart.innerText = heartIcons[Math.floor(Math.random() * heartIcons.length)];
-            
             heart.style.left = Math.random() * 100 + 'vw';
             heart.style.setProperty('--random-x', (Math.random() * 200 - 100) + 'px');
             heart.style.animationDuration = (Math.random() * 2 + 1.5) + 's'; 
-            
             document.body.appendChild(heart);
             setTimeout(() => { heart.remove(); }, 3500);
         }
@@ -590,15 +529,11 @@
         yesBtn.addEventListener('click', () => {
             questionBox.classList.add('hidden');
             successScreen.classList.remove('hidden');
-            
-            // Hide standard slides navigations
             document.querySelector('.nav-arrows').style.display = 'none';
             if(cardFrame) cardFrame.style.maxWidth = "550px";
 
-            // Loop tons of gorgeous floating hearts upwards
             const heartInterval = setInterval(createFloatingHeart, 50);
 
-            // Colorful premium confetti spray parameters
             const length = 12 * 1000;
             const endAnim = Date.now() + length;
             const confDefaults = { startVelocity: 35, spread: 360, ticks: 70, zIndex: 10001 };
@@ -615,6 +550,14 @@
               confetti({ ...confDefaults, count, origin: { x: scopeRange(0.1, 0.4), y: Math.random() - 0.2 } });
               confetti({ ...confDefaults, count, origin: { x: scopeRange(0.6, 0.9), y: Math.random() - 0.2 } });
             }, 250);
+
+            const savedPhone = document.getElementById('edit-phone-number').value;
+            if(savedPhone && savedPhone.trim() !== "") {
+                setTimeout(() => {
+                    const customMessage = encodeURIComponent("I opened your link and YES! ❤️ I will gladly be your girlfriend!");
+                    window.open(`https://wa.me/${savedPhone.trim()}?text=${customMessage}`, '_blank');
+                }, 2200);
+            }
         });
 
         window.onload = () => { loadSavedData(); };

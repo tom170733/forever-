@@ -13,7 +13,7 @@
             --primary-pink: #ff4d6d;
             --secondary-pink: #ff758f;
             --bg-gradient: linear-gradient(135deg, #ffe5ec 0%, #ffb3c1 100%);
-            --text-color: #2b2d43;
+            --text-color: #2b2d42;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -131,6 +131,9 @@
         .btn-prev { background: #4a4e69; color: white; }
         .btn-prev:disabled { opacity: 0.3; cursor: not-allowed; }
         .btn-close { background: #ff4d6d; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; border: none; cursor: pointer; }
+        
+        .toggle-container { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
+        .toggle-container input { cursor: pointer; width: 16px; height: 16px; }
 
         /* --- HORIZONTAL SWIPE CONTAINER --- */
         .swiper-container {
@@ -288,8 +291,12 @@
                 <input type="text" id="edit-main-sub" value="I made a little space just for you. Use the arrow below to see it.">
             </div>
             <div class="input-group">
-                <label style="color: #ff758f; font-weight: bold;">🔑 Set Front Page Password</label>
-                <input type="text" id="edit-gate-pass" value="AMIRA" style="border: 2px solid #ff4d6d;">
+                <label style="color: #ff758f; font-weight: bold;">🔑 Gate Security Settings</label>
+                <input type="text" id="edit-gate-pass" value="AMIRA" style="border: 2px solid #ff4d6d; margin-bottom: 5px;">
+                <div class="toggle-container">
+                    <input type="checkbox" id="edit-gate-enabled" checked>
+                    <label for="edit-gate-enabled" style="margin: 0; color: #ffe5ec; cursor: pointer;">Require password to enter site</label>
+                </div>
             </div>
         </div>
 
@@ -391,18 +398,19 @@
 
         function checkVisitorPassword() {
             const entered = document.getElementById('visitor-pass-input').value;
-            
-            // Gets the active dashboard value directly, falls back to AMIRA
             let currentLivePass = localStorage.getItem('g_gate_pass') || "AMIRA";
             
-            // Closes gate if it matches the code default OR whatever you customized it to
             if (entered === "AMIRA" || entered === currentLivePass) {
-                const gate = document.getElementById('gatekeeper-screen');
-                gate.style.opacity = '0';
-                setTimeout(() => { gate.style.visibility = 'hidden'; }, 500);
+                bypassGate();
             } else {
-                alert("Incorrect Password!"); // Hint totally hidden now
+                alert("Incorrect Password!");
             }
+        }
+
+        function bypassGate() {
+            const gate = document.getElementById('gatekeeper-screen');
+            gate.style.opacity = '0';
+            setTimeout(() => { gate.style.visibility = 'hidden'; }, 500);
         }
 
         function slidePage(direction) {
@@ -466,6 +474,7 @@
             localStorage.setItem('g_l2', document.getElementById('edit-letter-2').value);
             
             localStorage.setItem('g_gate_pass', document.getElementById('edit-gate-pass').value);
+            localStorage.setItem('g_gate_enabled', document.getElementById('edit-gate-enabled').checked ? "true" : "false");
 
             storeMedia('edit-main-media', 'g_m0');
             storeMedia('edit-t1-media', 'g_m1');
@@ -498,6 +507,10 @@
             if(localStorage.getItem('g_gate_pass')) {
                 document.getElementById('edit-gate-pass').value = localStorage.getItem('g_gate_pass');
             }
+            
+            if(localStorage.getItem('g_gate_enabled')) {
+                document.getElementById('edit-gate-enabled').checked = (localStorage.getItem('g_gate_enabled') === "true");
+            }
 
             updateLiveDOM();
             slidePage(0);
@@ -515,6 +528,15 @@
             document.getElementById('view-letter-1').innerText = document.getElementById('edit-letter-1').value;
             document.getElementById('view-letter-2').innerText = document.getElementById('edit-letter-2').value;
             displayMediaContainer('g_m4', 'media-container-4');
+
+            // Handle lock screen display live
+            const isEnabled = document.getElementById('edit-gate-enabled').checked;
+            if (!isEnabled) {
+                bypassGate();
+            } else {
+                document.getElementById('gatekeeper-screen').style.visibility = 'visible';
+                document.getElementById('gatekeeper-screen').style.opacity = '1';
+            }
         }
 
         function displayMediaContainer(storageKey, containerId) {
